@@ -1,0 +1,117 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # allow manual triggering from GitHub page
+  schedule:
+    # run at 5:30 AM in the America/New_York timezone every Monday through Friday
+    - cron: '30 5 * * 1-5'
+      timezone: "America/New_York"
+
+env:
+  # Uncomment these to run in `act` (GitHub Actions local runner)
+  DK0EXE: /Volumes/ExtremeSSD/Source/dksdk-coder/_build/default/ext/MlFront/src/DkZero_Exec/Shell.exe
+  INPUTVERSION: '2.5' # ${{ inputs.dk-version }}
+  INPUTOPTIONS: -nosysinc --cell "dk0=${{ github.workspace }}" # ${{ inputs.options }}
+  INPUTDISTSCRIPT: etc/dk/v/dist-win32.u # ${{ inputs.distscript }}
+  INPUTID: CommonsBase_Std@2.5.209902260544 # ${{ inputs.id }}
+  INPUTPUBKEY: ${{ secrets.distribute_2_5_pubkey }} # ${{ inputs.pubkey }}
+  INPUTSECKEY: ${{ secrets.distribute_2_5_seckey }} # ${{ inputs.seckey }}
+
+jobs:
+  distribute:
+    runs-on: macos-latest
+    # env:
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set DK variables
+        id: dk-vars
+        shell: bash
+        run: |
+          case "${{ env.INPUTVERSION }}" in
+            2.4) DK_BUILD_VERSION_REF=V2_4; DK_BUILD_VERSION_MAJMIN=2.4 ;;
+            2.5) DK_BUILD_VERSION_REF=V2_5; DK_BUILD_VERSION_MAJMIN=2.5 ;;
+            *) echo "::error title=⛔ error hint::Unsupported version '${{ env.INPUTVERSION }}'. Supported versions: 2.4, 2.5"; exit 1 ;;
+          esac
+          echo "dk_build_version_ref=${DK_BUILD_VERSION_REF}" | tee -a "$GITHUB_OUTPUT"
+          echo "dk_build_version_majmin=${DK_BUILD_VERSION_MAJMIN}" | tee -a "$GITHUB_OUTPUT"
+
+          # distribution part. etc/dk/v/XXX/YYY.t -> YYY
+          part=$(basename ${{ env.INPUTDISTSCRIPT }})
+          part="${part%%.*}"
+          echo "dk_dist_part=${part}" | tee -a "$GITHUB_OUTPUT"
+
+          # split id into library_id and version
+          if [[ "$${{ env.INPUTID }}" != *@* ]]; then
+            echo "::error title=⛔ error hint::Invalid id '${{ env.INPUTID }}'. Must be of the form SomeLibrary_Unit@Version, like CommonsBase_Std@1.0.1"
+            exit 1
+          fi
+          DK_ID="${{ env.INPUTID }}"
+          DK_ID_LIBRARY="${DK_ID%@*}"
+          DK_ID_VERSION="${DK_ID#*@}"
+          if [[ -z "$DK_ID_LIBRARY" || -z "$DK_ID_VERSION" ]]; then
+            echo "::error title=⛔ error hint::Invalid id '${{ env.INPUTID }}'. Must be of the form SomeLibrary_Unit@Version, like CommonsBase_Std@1.0.1"
+            exit 1
+          fi
+
+          # validate version is valid semver using suggested semver regex
+          # from https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
+          if command -v perl; then
+            if ! perl -e 'exit 1 unless shift =~ /^(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;' "$DK_ID_VERSION"; then
+              echo "::error title=⛔ error hint::Invalid version '${DK_ID_VERSION}' in id '${{ env.INPUTID }}'. Version must be valid semver, like 1.0.1 or 1.0.0+some-build-metadata"
+              exit 1
+            fi
+          else
+            echo "::warning title=⚠️ warning hint::perl not found. Skipping semver validation for version '${DK_ID_VERSION}' in id '${{ env.INPUTID }}'. Version must be valid semver, like 1.0.1 or 1.0.0+some-build-metadata"
+          fi
+
+          # strip build metadata from version
+          DK_ID_VERSION="${DK_ID_VERSION%%+*}"
+
+          echo "dk_id_library=${DK_ID_LIBRARY}" | tee -a "$GITHUB_OUTPUT"
+          echo "dk_id_version=${DK_ID_VERSION}" | tee -a "$GITHUB_OUTPUT"
+
+          # convert version like 1.2.3 to underscore separated major and minor version like 1_2
+          DK_ID_VERSION_MAJMINUNDER=$(printf "%s" "${DK_ID_VERSION}" | awk -F. '{print $1"_"$2}')
+          echo "dk_id_version_majminunder=${DK_ID_VERSION_MAJMINUNDER}" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Check Key Pairs
+        if: env.INPUTPUBKEY == '' || env.INPUTSECKEY == ''
+        shell: bash
+        # Produce message like:
+        # > Distribution keypair missing. You need to populate 'distribute_2_4_pubkey' and 'distribute_2_4_seckey' in the Secrets for your workflow. See more in https://docs.github.com/en/actions/security-guides/encrypted-secrets. Then set the 'pubkey' and 'seckey' inputs in the 'with:' block of the workflow step, like: pubkey: ${{ secrets.distribute_2_4_pubkey }} seckey: ${{ secrets.distribute_2_4_seckey }}
+        run: |
+          echo "::error title=⛔ error hint::Distribution keypair missing. You need to populate 'distribute_${{ steps.dk-vars.outputs.dk_id_version_majminunder }}_pubkey' and 'distribute_${{ steps.dk-vars.outputs.dk_id_version_majminunder }}_seckey' in the Secrets for your workflow. See more in https://docs.github.com/en/actions/security-guides/encrypted-secrets. Then set the 'pubkey' and 'seckey' inputs in the 'with:' block of the workflow step, like the following on two lines: ${{ format('pubkey: {0}{1}{1} secrets.distribute_{3}_pubkey {2}{2} seckey: {0}{1}{1} secrets.distribute_{3}_seckey {2}{2}', '\$', '{', '}', steps.dk-vars.outputs.dk_id_version_majminunder) }}"
+          exit 1
+
+      - name: Dump
+        env:
+          OCAMLRUNPARAM: b
+        run: |
+          pwd
+          ls
+          ${{ env.DK0EXE }} ${{ env.INPUTOPTIONS }} --verbose distribute all etc/dk/v/dist-win32.u --library CommonsBase_Std@2.5.209902260544 --prepare-dir "${{ github.workspace }}/etc/dk/d"
+
+      # - name: Set up Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '3.x'
+
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install wheel twine
+
+      # - name: Build the package
+      #   run: |
+      #     python setup.py sdist bdist_wheel
+
+      # - name: Publish to PyPI
+      #   env:
+      #     TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+      #     TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      #   run: |
+      #     twine upload dist/* --skip-existing
