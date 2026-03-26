@@ -9,19 +9,34 @@ on:
       timezone: "America/New_York"
 
 env:
-  # Uncomment these to run in `act` (GitHub Actions local runner)
-  DK0EXE: /Volumes/ExtremeSSD/Source/dksdk-coder/_build/default/ext/MlFront/src/DkZero_Exec/Shell.exe
-  INPUTVERSION: '2.5' # ${{ inputs.dk-version }}
-  INPUTOPTIONS: -nosysinc --cell "dk0=${{ github.workspace }}" # ${{ inputs.options }}
-  INPUTDISTSCRIPT: etc/dk/v/dist-win32.u # ${{ inputs.distscript }}
-  INPUTID: CommonsBase_Std@2.5.209902260544 # ${{ inputs.id }}
-  INPUTPUBKEY: ${{ secrets.distribute_2_5_pubkey }} # ${{ inputs.pubkey }}
-  INPUTSECKEY: ${{ secrets.distribute_2_5_seckey }} # ${{ inputs.seckey }}
+  # To test with `act` on Windows you need to open Visual Studio Code from within Git Bash so `shell: bash` works.
+  DK0WIN32: ${{ vars.dk0win32 || 'dksrc\dk0.cmd' }}
+  DK0UNIX: ${{ vars.dk0unix || 'dksrc/dk0' }}
+  HAVEDK0: ${{ vars.havedk0 || 'false' }}
+  INPUTVERSION: ${{ inputs.dk-version || vars.dkversion }}
+  INPUTOPTIONS: ${{ inputs.options || vars.options || format('-nosysinc --cell "dk0={0}"', github.workspace) }}
+  INPUTDISTSCRIPT: ${{ inputs.distscript || vars.distscript }}
+  INPUTID: ${{ inputs.id || vars.id }}
+  INPUTPUBKEY: ${{ inputs.pubkey || vars.pubkey }}
+  INPUTSECKEY: ${{ inputs.seckey || vars.seckey }}
+  INPUTUSECACHE: ${{ inputs.use-cache || vars.usecache || 'true' }}
+  INPUTEXPERIMENTAL_DK_OWNER: ${{ inputs.experimental-dk-owner || vars.experimental_dk_owner }}
+  INPUTEXPERIMENTAL_MLFRONT_REF: ${{ inputs.experimental-mlfront-ref || vars.experimental_mlfront_ref }}
 
 jobs:
   distribute:
-    runs-on: macos-latest
-    # env:
+    runs-on: windows-latest
+
+    permissions:
+      contents: write # for action-gh-release
+      id-token: write # for actions/attest-build-provenance
+      attestations: write # for actions/attest-build-provenance
+      # required but does not work in `act`! bug: https://github.com/nektos/act/issues/6025
+      #artifact-metadata: write # for actions/attest-build-provenance
+
+    # The secrets created by `dksrc/dk0 prepare-version --ci github VERSION`
+    # are tied to this environment only.
+    environment: dk-distribution
 
     steps:
       - name: Checkout repository
@@ -87,31 +102,187 @@ jobs:
           echo "::error title=⛔ error hint::Distribution keypair missing. You need to populate 'distribute_${{ steps.dk-vars.outputs.dk_id_version_majminunder }}_pubkey' and 'distribute_${{ steps.dk-vars.outputs.dk_id_version_majminunder }}_seckey' in the Secrets for your workflow. See more in https://docs.github.com/en/actions/security-guides/encrypted-secrets. Then set the 'pubkey' and 'seckey' inputs in the 'with:' block of the workflow step, like the following on two lines: ${{ format('pubkey: {0}{1}{1} secrets.distribute_{3}_pubkey {2}{2} seckey: {0}{1}{1} secrets.distribute_{3}_seckey {2}{2}', '\$', '{', '}', steps.dk-vars.outputs.dk_id_version_majminunder) }}"
           exit 1
 
-      - name: Dump
-        env:
-          OCAMLRUNPARAM: b
+      # --------- C.1: Get dksrc/dk0 ----------
+
+      - name: Get dksrc/dk0
+        if: >
+          env.HAVEDK0 == 'false'
+          && env.INPUTEXPERIMENTAL_DK_OWNER != ''
+          && (env.INPUTEXPERIMENTAL_MLFRONT_REF == '' || env.INPUTEXPERIMENTAL_MLFRONT_REF == 'false')
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ env.INPUTEXPERIMENTAL_DK_OWNER }}/dk
+          path: dksrc
+          ref: ${{ steps.dk-vars.outputs.dk_build_version_ref }}
+
+      - name: Get dksrc/dk0
+        if: >
+          env.HAVEDK0 == 'false'
+          && env.INPUTEXPERIMENTAL_DK_OWNER == ''
+          && (env.INPUTEXPERIMENTAL_MLFRONT_REF == '' || env.INPUTEXPERIMENTAL_MLFRONT_REF == 'false')
+        uses: actions/checkout@v5
+        with:
+          repository: diskuv/dk
+          path: dksrc
+          ref: ${{ steps.dk-vars.outputs.dk_build_version_ref }}
+
+      # --------- C.2: Install dksrc/dk0 ----------
+      - name: Set-up OCaml
+        if: env.HAVEDK0 == 'false' && env.INPUTEXPERIMENTAL_MLFRONT_REF != '' && env.INPUTEXPERIMENTAL_MLFRONT_REF != 'false'
+        uses: ocaml/setup-ocaml@57d9aa353e8d39677b1b9fc39637d48f27fe4a91 # v3
+        with:
+          ocaml-compiler: 5.4.0
+          #   (synced from OCAML_OPAM_REPOSITORY in MlFront/.gitlab-ci.yml)
+          #   2025-11-08. dkml-c-probe.3.2.0
+          #   2025-10-10. initial
+          opam-repositories: |
+            default: git+https://github.com/ocaml/opam-repository.git#88e773ad9e5a6ed02fb2c1fab59e649624ac9db4
+          cache-prefix: dk-distribute-v1
+      - name: Get MlFront
+        if: env.HAVEDK0 == 'false' && env.INPUTEXPERIMENTAL_MLFRONT_REF != '' && env.INPUTEXPERIMENTAL_MLFRONT_REF != 'false'
+        shell: bash
+        #   `git commit` required since `opam pin`` uses git+file://
         run: |
-          pwd
-          ls
-          ${{ env.DK0EXE }} ${{ env.INPUTOPTIONS }} --verbose distribute all etc/dk/v/dist-win32.u --library CommonsBase_Std@2.5.209902260544 --prepare-dir "${{ github.workspace }}/etc/dk/d"
+          git clone https://gitlab.com/dkml/build-tools/MlFront.git
+          cd MlFront
+          git reset --hard '${{ env.INPUTEXPERIMENTAL_MLFRONT_REF }}'
 
-      # - name: Set up Python
-      #   uses: actions/setup-python@v4
-      #   with:
-      #     python-version: '3.x'
+          sh ci/localize-pristine.sh
+          git config user.email "nobody@example.com"
+          git config user.name "nobody"
+          git add --force dune-project *.opam
+          git commit -m "pristine"
 
-      # - name: Install dependencies
-      #   run: |
-      #     python -m pip install --upgrade pip
-      #     pip install wheel twine
+          printf 'opam version: '
+          opam --version
+      - name: Pin Latest MlFront
+        if: env.HAVEDK0 == 'false' && env.INPUTEXPERIMENTAL_MLFRONT_REF != '' && env.INPUTEXPERIMENTAL_MLFRONT_REF != 'false'
+        shell: bash
+        run: cd MlFront && opam pin . --no-action -y
+      - name: Install MlFront_Exec
+        if: env.HAVEDK0 == 'false' && env.INPUTEXPERIMENTAL_MLFRONT_REF != '' && env.INPUTEXPERIMENTAL_MLFRONT_REF != 'false'
+        shell: bash
+        # Use `./MlFront_Exec.opam` not `MlFront_Exec` to process pin-depends:[]
+        run: cd MlFront && opam install ./MlFront_Exec.opam -y
+      - name: Create dksrc/dk0 Wrapper on Unix
+        if: runner.os != 'Windows' && env.HAVEDK0 == 'false' && env.INPUTEXPERIMENTAL_MLFRONT_REF != '' && env.INPUTEXPERIMENTAL_MLFRONT_REF != 'false'
+        shell: bash
+        run: |
+          install -d dksrc
+          printf '#!/bin/sh\nset -euf\nopam exec -- dk0 "$@"\n' | tee dksrc/dk0
+          chmod +x dksrc/dk0
+      - name: Create dksrc\dk0.cmd Wrapper on Windows
+        if: runner.os == 'Windows' && env.HAVEDK0 == 'false' && env.INPUTEXPERIMENTAL_MLFRONT_REF != '' && env.INPUTEXPERIMENTAL_MLFRONT_REF != 'false'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path dksrc -Force | Out-Null
+          $content = "@echo off`nsetlocal enabledelayedexpansion`nopam exec -- dk0 %*`n"
+          Set-Content -Path dksrc\dk0.cmd -Value $content -Encoding ASCII
 
-      # - name: Build the package
-      #   run: |
-      #     python setup.py sdist bdist_wheel
+      # --------- E.1 Cache Restore ----------
+      - name: Cache restore dk stores
+        if: env.INPUTUSECACHE != '' && env.INPUTUSECACHE != 'false'
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        id: restore-cache-dk-distribute
+        with:
+            # The data stores (and build keys) are safe to share between Windows, macOS and Linux
+            enableCrossOsArchive: true
+            #   SYNC: must match Cache Save below
+            path: t
+            #   SYNC: must match Cache Save below.
+            key: dk-stores-and-keys-x1-${{ steps.dk-vars.outputs.dk_build_version_majmin }}-${{ github.run_id }} # update cache on every run
+            restore-keys: dk-stores-and-keys-x1-${{ steps.dk-vars.outputs.dk_build_version_majmin }}             # use latest cache for this version
 
-      # - name: Publish to PyPI
-      #   env:
-      #     TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-      #     TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      #   run: |
-      #     twine upload dist/* --skip-existing
+      # --------- G.1 Distribute ----------
+
+      - name: Distribute on Unix
+        env:
+            DK_BUILD_PUBKEY: "${{ env.INPUTPUBKEY }}"
+            DK_BUILD_SECKEY: "${{ env.INPUTSECKEY }}"
+        shell: bash
+        if: runner.os != 'Windows'
+        # --errors-plain option helps cross-platform CI caches since the cache+data is under the project t/ subdirectory
+        run: |
+          echo distribute and combine ...
+
+          echo "Building object $object: dksrc/dk0 --errors-plain ${{ env.INPUTOPTIONS }} --keys-env DK_BUILD --verbose distribute ${{ steps.dk-vars.outputs.dk_id_library }}-${{ steps.dk-vars.outputs.dk_dist_part }} --library '${{ steps.dk-vars.outputs.dk_id_library }}@${{ steps.dk-vars.outputs.dk_id_version }}' ${{ env.INPUTDISTSCRIPT }}"
+          ${{ env.DK0UNIX }} --errors-plain ${{ env.INPUTOPTIONS }} --keys-env DK_BUILD --verbose distribute ${{ steps.dk-vars.outputs.dk_id_library }}-${{ steps.dk-vars.outputs.dk_dist_part }} --library '${{ steps.dk-vars.outputs.dk_id_library }}@${{ steps.dk-vars.outputs.dk_id_version }}' ${{ env.INPUTDISTSCRIPT }}
+
+          echo "Collecting tracestore: dksrc/dk0 --errors-plain ${{ env.INPUTOPTIONS }} --keys-env DK_BUILD --verbose distribute ${{ steps.dk-vars.outputs.dk_id_library }}-$part --no-valuestore --library '${{ steps.dk-vars.outputs.dk_id_library }}@${{ steps.dk-vars.outputs.dk_id_version }}'"
+          ${{ env.DK0UNIX }} --errors-plain ${{ env.INPUTOPTIONS }} --keys-env DK_BUILD --verbose distribute ${{ steps.dk-vars.outputs.dk_id_library }}-$part --no-valuestore --library '${{ steps.dk-vars.outputs.dk_id_library }}@${{ steps.dk-vars.outputs.dk_id_version }}'
+
+          echo "Combining: dksrc/dk0 --errors-plain ${{ env.INPUTOPTIONS }} --verbose combine --origin-name '${{ steps.dk-vars.outputs.dk_id_library }}' --mirror '${{github.server_url}}/${{github.repository}}/releases/download/${{github.ref_name}}'"
+          ${{ env.DK0UNIX }} --errors-plain ${{ env.INPUTOPTIONS }} --verbose combine --origin-name '${{ steps.dk-vars.outputs.dk_id_library }}' --mirror '${{github.server_url}}/${{github.repository}}/releases/download/${{github.ref_name}}'
+
+          du -sh dk-dist/*
+
+      - name: Query traces on Unix
+        env:
+            DK_BUILD_PUBKEY: "${{ env.INPUTPUBKEY }}"
+            DK_BUILD_SECKEY: "${{ env.INPUTSECKEY }}"
+            OCAMLRUNPARAM: b
+        shell: bash
+        if: runner.os != 'Windows'
+        run: |
+          ${{ env.DK0UNIX }} --errors-plain ${{ env.INPUTOPTIONS }} --keys-env DK_BUILD query
+
+      - name: Distribute on Windows
+        env:
+            DK_BUILD_PUBKEY: "${{ env.INPUTPUBKEY }}"
+            DK_BUILD_SECKEY: "${{ env.INPUTSECKEY }}"
+        shell: pwsh
+        if: runner.os == 'Windows'
+        run: |
+          Write-Host "distribute and combine ..."
+
+          Write-Host "Building object ${object}: dksrc\dk0.cmd --errors-plain ${{ env.INPUTOPTIONS }} --keys-env DK_BUILD --verbose distribute ${{ steps.dk-vars.outputs.dk_id_library }}-${{ steps.dk-vars.outputs.dk_dist_part }} --library '${{ steps.dk-vars.outputs.dk_id_library }}@${{ steps.dk-vars.outputs.dk_id_version }}' ${{ env.INPUTDISTSCRIPT }}"
+          ${{ env.DK0WIN32 }} --errors-plain ${{ env.INPUTOPTIONS }} --keys-env DK_BUILD --verbose distribute ${{ steps.dk-vars.outputs.dk_id_library }}-${{ steps.dk-vars.outputs.dk_dist_part }} --library '${{ steps.dk-vars.outputs.dk_id_library }}@${{ steps.dk-vars.outputs.dk_id_version }}' ${{ env.INPUTDISTSCRIPT }}
+          if ($LASTEXITCODE -ne 0) {
+            throw "dk0 distribute failed with exit code $LASTEXITCODE"
+          }
+
+          Write-Host "Combining: dksrc\dk0.cmd --errors-plain ${{ env.INPUTOPTIONS }} --verbose combine --origin-name '${{ steps.dk-vars.outputs.dk_id_library }}' --mirror '${{github.server_url}}/${{github.repository}}/releases/download/${{github.ref_name}}'"
+          ${{ env.DK0WIN32 }} --errors-plain ${{ env.INPUTOPTIONS }} --verbose combine --origin-name '${{ steps.dk-vars.outputs.dk_id_library }}' --mirror '${{github.server_url}}/${{github.repository}}/releases/download/${{github.ref_name}}'
+          if ($LASTEXITCODE -ne 0) {
+            throw "dk0 combine failed with exit code $LASTEXITCODE"
+          }
+
+          Get-ChildItem -Directory dk-dist | ForEach-Object {
+              $size = (Get-ChildItem $_.FullName -Recurse -File | Measure-Object -Property Length -Sum).Sum
+              $sizeGB = [math]::Round($size / 1GB, 2)
+              Write-Output "$($sizeGB) GB`t$($_.Name)"
+          }
+
+      - name: Query traces on Windows
+        env:
+            DK_BUILD_PUBKEY: "${{ env.INPUTPUBKEY }}"
+            DK_BUILD_SECKEY: "${{ env.INPUTSECKEY }}"
+            OCAMLRUNPARAM: b
+        shell: pwsh
+        if: runner.os == 'Windows'
+        run: |
+          ${{ env.DK0WIN32 }} --errors-plain ${{ env.INPUTOPTIONS }} --keys-env DK_BUILD query
+          if ($LASTEXITCODE -ne 0) {
+            throw "dk0 query failed with exit code $LASTEXITCODE"
+          }
+
+      - name: Save logs
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: logs
+          # ex. t/p/476/zx3y/l/Release.Agnostic/stdout.log
+          path: t/p/*/*/l/*/
+
+      # --------- X.1 Cache Save ----------
+      - name: Cache save dk stores
+        if: env.INPUTUSECACHE != '' && env.INPUTUSECACHE != 'false' && steps.restore-cache-dk-distribute.outputs.cache-hit == ''
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        id: save-cache-dk-distribute
+        with:
+            # The data stores (and build keys) are safe to share between Windows, macOS and Linux
+            enableCrossOsArchive: true
+            #   SYNC: must match Cache Load above
+            path: t
+            #   SYNC: must match Cache Load above
+            key: dk-stores-and-keys-x1-${{ steps.dk-vars.outputs.dk_build_version_majmin }}-${{ github.run_id }} # update cache on every run

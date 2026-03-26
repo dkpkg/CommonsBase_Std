@@ -1,3 +1,6 @@
-distribute.secrets
+act.distribute.secrets
+t/c/
 t/d/
 t/k/
+t/p/
+t/xr/
