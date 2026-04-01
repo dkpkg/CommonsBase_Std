@@ -26,7 +26,7 @@ jobs:
       matrix:
         include:
           - runs-on: windows-2022 # CommonsBase_Std requires Windows to use S7z
-            distscript: etc/dk/v/dist-win32.u
+            distscript: dist-win32.u
 
     runs-on: ${{ matrix.runs-on }}
     steps:

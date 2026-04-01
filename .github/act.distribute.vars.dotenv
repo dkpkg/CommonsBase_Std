@@ -2,7 +2,7 @@
 id="CommonsBase_Std@2.5.209902260544"
 dkversion="2.5"
 options="-nosysinc --cell 'dk0=${{ github.workspace }}'"
-distscript="etc/dk/v/dist-win32.u"
+distscript="dist-win32.u"
 usecache="true"
 
 havedk0="true"
