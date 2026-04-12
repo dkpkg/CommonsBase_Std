@@ -37,7 +37,7 @@ jobs:
         with:
             pubkey: ${{ secrets.distribute_2_5_pubkey }}
             seckey: ${{ secrets.distribute_2_5_seckey }}
-            options: -nosysinc -I etc/dk/v # -I etc/dk/v not needed after dk 2.4.2.111
+            options: -nosysinc
             use-cache: true
             distscript: ${{ matrix.distscript }}
             experimental-dk-owner: ${{ github.repository_owner }}
