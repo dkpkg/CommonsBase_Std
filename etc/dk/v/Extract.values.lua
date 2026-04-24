@@ -14,9 +14,9 @@ function rules.F_Untar(command, request)
     local modver = assert(request.user.modver, "please provide `modver=MODULE@VERSION`")
     return {
       declareoutput = {
-        return_form = {
+        return_objects = {
           id = modver,
-          slot = "Release.Agnostic"
+          slots = { "Release.Agnostic" }
         }
       }
     }
@@ -48,9 +48,9 @@ function rules.F_TarToZip(command, request)
     local modver = assert(request.user.modver, "please provide `modver=MODULE@VERSION`")
     return {
       declareoutput = {
-        return_form = {
+        return_objects = {
           id = modver,
-          slot = "Release.Agnostic"
+          slots = { "Release.Agnostic" }
         }
       }
     }
