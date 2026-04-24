@@ -50,41 +50,57 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
           }
         ],
         "commands": [
+          // TEMPLATE:
           // with [7zr.exe] ...
-          "bin/${SLOTNAME.request}/7zr.exe",
+          //  "bin/${SLOTNAME.request}/7zr.exe",
           // e(x)tract files into directory tree
-          "x",
+          //  "x",
           // to output directory for slot [Release.Windows_arm] (etc.)
-          "-o${SLOT.request}",
+          //  "-o${SLOT.request}",
           // from the asset [7z2501-arm.exe] renamed [7z-Release.Windows_arm.exe] (etc.)
-          "7z-${SLOTNAME.request}.exe",
-          // extract only the '7z.exe' executable and 'LICENSE' file
-          "7z.exe",
-          "License.txt"
+          //  "7z-${SLOTNAME.request}.exe",
+          // extract the '7z.exe' executable and 'LICENSE' file, and '7z.dll' if Windows
+          //  "7z.exe",
+          //  "License.txt",
+
+          [
+            "bin/${SLOTNAME.Release.execution_abi}/7zr.exe",
+            "x", "-o${SLOT.Release.Windows_arm}",
+            "7z-Release.Windows_arm.exe",
+            "7z.exe", "7z.dll", "License.txt"
+          ],
+          [
+            "bin/${SLOTNAME.Release.execution_abi}/7zr.exe",
+            "x", "-o${SLOT.Release.Windows_arm64}",
+            "7z-Release.Windows_arm64.exe",
+            "7z.exe", "7z.dll", "License.txt"
+          ],
+          [
+            "bin/${SLOTNAME.Release.execution_abi}/7zr.exe",
+            "x", "-o${SLOT.Release.Windows_x86}",
+            "7z-Release.Windows_x86.exe",
+            "7z.exe", "7z.dll", "License.txt"
+          ],
+          [
+            "bin/${SLOTNAME.Release.execution_abi}/7zr.exe",
+            "x", "-o${SLOT.Release.Windows_x86_64}",
+            "7z-Release.Windows_x86_64.exe",
+            "7z.exe", "7z.dll", "License.txt"
+          ]
         ]
       },
       "outputs": {
         "assets": [
           {
-            "paths": ["7z.exe", "License.txt"],
+            // 7z.dll is on Windows GitHub Actions as of 2026-04-24, and was on some
+            // developer desktops. It is critical that 7z.exe does not pick up a
+            // system 7z.dll.
+            "paths": ["7z.exe", "7z.dll", "License.txt"],
             "slots": [
               "Release.Windows_arm",
               "Release.Windows_arm64",
               "Release.Windows_x86",
-              "Release.Windows_x86_64",
-              // Other architectures depend on this form, but this form needs to run on Windows.
-              // Whenever we use ${SLOT.request} the output slots determine the dependencies allowed,
-              // so we list all possible architectures here.
-              // You can verify with '-d task' to see that tasks are created per output slot.
-              // If you forget one, you'll get an error like the following (but you'll also get a hint):
-              //   Could not find `CommonsBase_Std.S7z.Windows7zExe@25.1.0+bn-20250101000000 -s Release.Windows_x86`
-              "Release.Agnostic",
-              "Release.Darwin_arm64",
-              "Release.Darwin_x86_64",
-              "Release.Linux_arm",
-              "Release.Linux_arm64",
-              "Release.Linux_x86",
-              "Release.Linux_x86_64"
+              "Release.Windows_x86_64"
             ]
           }
         ]
