@@ -16,7 +16,8 @@ function rules.F_Untar(command, request)
       declareoutput = {
         return_objects = {
           id = modver,
-          slots = { "Release.Agnostic" }
+          slots = { "Release.Agnostic" },
+          execution_slot = "Release.Agnostic"
         }
       }
     }
@@ -50,7 +51,8 @@ function rules.F_TarToZip(command, request)
       declareoutput = {
         return_objects = {
           id = modver,
-          slots = { "Release.Agnostic" }
+          slots = { "Release.Agnostic" },
+          execution_slot = "Release.Agnostic"
         }
       }
     }
