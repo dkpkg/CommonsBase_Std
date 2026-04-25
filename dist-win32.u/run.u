@@ -53,7 +53,9 @@ CommonsBase_Std.Fd requires CommonsBase_Std.Extract0.
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_Untar@0.1.0
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   'paths[]=somefile'
-  [pass] object:ovvokh5jjg4jwgyesncmhkwpbjbugtcy373gullhxmdhgbcsaoozq:OurTest_Std.CommonsBase.Std.Extract.F_Untar@0.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Agnostic": "ovvokh5jjg4jwgyesncmhkwpbjbugtcy373gullhxmdhgbcsaoozq"
+  }
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
 
@@ -88,76 +90,136 @@ Others: the S7z object
   $ post-object CommonsBase_Std.Extract.F_TarToZip@0.1.0 -f ${RUNTIME}/Extract.F_TarToZip.tartozip.zip
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.1.0
-  [pass] object:oxy4lf5ymwrqm52mkn4ylkorwd32ewau2vgsogleno2blw6hsstsq:OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Agnostic": "oxy4lf5ymwrqm52mkn4ylkorwd32ewau2vgsogleno2blw6hsstsq"
+  }
 
 ## CommonsBase_Std.S7z.S7zr@25.1.0
   $ get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.S7zr-25.1.0.zip
-  [pass] object:o6mbbz5lppxk7lltlewdl3ukysykgeyrlpsdhjgcldhmrzvo4pueq:CommonsBase_Std.S7z.S7zr@25.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86_64": "o6mbbz5lppxk7lltlewdl3ukysykgeyrlpsdhjgcldhmrzvo4pueq"
+  }
 
 ## CommonsBase_Std.S7z.Windows7zExe@25.1.0
   $ get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.Windows7zExe-25.1.0.zip
-  [pass] object:oskdjufi6rrzq6tavtjxeo4kjnxmykq7cfquiez77hmkp754rfwaq:CommonsBase_Std.S7z.Windows7zExe@25.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86_64": "oskdjufi6rrzq6tavtjxeo4kjnxmykq7cfquiez77hmkp754rfwaq"
+  }
 
 ## CommonsBase_Std.Coreutils@0.2.2
   $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-Coreutils-0.2.2.zip
-  [pass] object:o7gntafiirl4vibmnv34tc42eqtgh72ccsnnvqwvlttf27k4hf2tq:CommonsBase_Std.Coreutils@0.2.2
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86": "o7gntafiirl4vibmnv34tc42eqtgh72ccsnnvqwvlttf27k4hf2tq"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.2.2.zip
-  [pass] object:o2npj4ay7c5zfbegeolrrtvgxciwvdi7mly4wjgeu2ibqgnsuqpja:CommonsBase_Std.Coreutils@0.2.2
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86_64": "o2npj4ay7c5zfbegeolrrtvgxciwvdi7mly4wjgeu2ibqgnsuqpja"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Coreutils-0.2.2.zip
-  [pass] object:obcu2tfsu7kfxosyejj3anoqsyiphz5ls7aptrfggaknydh5j7pta:CommonsBase_Std.Coreutils@0.2.2
+  \test(pass)\dkobjects\;{
+    "Release.Darwin_arm64": "obcu2tfsu7kfxosyejj3anoqsyiphz5ls7aptrfggaknydh5j7pta"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Darwin_x86_64 -f ${RUNTIME}/Darwin_x86_64-Coreutils-0.2.2.zip
-  [pass] object:olw7vbbketz3zeoqa4vkikeun7hbwejatareohhpg6cnlxw5qqohq:CommonsBase_Std.Coreutils@0.2.2
+  \test(pass)\dkobjects\;{
+    "Release.Darwin_x86_64": "olw7vbbketz3zeoqa4vkikeun7hbwejatareohhpg6cnlxw5qqohq"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-Coreutils-0.2.2.zip
-  [pass] object:orbpkvubnlvghxbzwr4fhcgzuvw7hyhn3n2sygck527ow5yjzsjzq:CommonsBase_Std.Coreutils@0.2.2
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86": "orbpkvubnlvghxbzwr4fhcgzuvw7hyhn3n2sygck527ow5yjzsjzq"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-Coreutils-0.2.2.zip
-  [pass] object:oug247u2tcxvroijdfyv42znb7qnt2ygrlrqw44crn6jlaethovaa:CommonsBase_Std.Coreutils@0.2.2
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86_64": "oug247u2tcxvroijdfyv42znb7qnt2ygrlrqw44crn6jlaethovaa"
+  }
 
 ## CommonsBase_Std.Coreutils@0.6.0
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-Coreutils-0.6.0.zip
-  [pass] object:ont7ofo7gfvvjmnrcbaqamnuq25xlwvthjgh5e2w6w65xbfythsda:CommonsBase_Std.Coreutils@0.6.0
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86": "ont7ofo7gfvvjmnrcbaqamnuq25xlwvthjgh5e2w6w65xbfythsda"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.6.0.zip
-  [pass] object:oei7stxtfiulvf5d43vgceu52iwfkriwlkovfwagkyza6iisfh3yq:CommonsBase_Std.Coreutils@0.6.0
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86_64": "oei7stxtfiulvf5d43vgceu52iwfkriwlkovfwagkyza6iisfh3yq"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Coreutils-0.6.0.zip
-  [pass] object:o7vxqdcyw5ob33ncqtep4qwlmpdfs3d4l446chiftodnwd34cf37a:CommonsBase_Std.Coreutils@0.6.0
+  \test(pass)\dkobjects\;{
+    "Release.Darwin_arm64": "o7vxqdcyw5ob33ncqtep4qwlmpdfs3d4l446chiftodnwd34cf37a"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Darwin_x86_64 -f ${RUNTIME}/Darwin_x86_64-Coreutils-0.6.0.zip
-  [pass] object:oohroq4h3lm2xpwc2mofm5hbqjkzbmnyzihc5aoggrvl3f72c3qra:CommonsBase_Std.Coreutils@0.6.0
+  \test(pass)\dkobjects\;{
+    "Release.Darwin_x86_64": "oohroq4h3lm2xpwc2mofm5hbqjkzbmnyzihc5aoggrvl3f72c3qra"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-Coreutils-0.6.0.zip
-  [pass] object:ojoe2g3duui2nrhf6mb3nbf66443kvg5q7nstllo2piihv2admyxq:CommonsBase_Std.Coreutils@0.6.0
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86": "ojoe2g3duui2nrhf6mb3nbf66443kvg5q7nstllo2piihv2admyxq"
+  }
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-Coreutils-0.6.0.zip
-  [pass] object:odukgoi3kx2eduawtawhxjgtok3jfqkgahcv7ojcqzit7vsmjb43a:CommonsBase_Std.Coreutils@0.6.0
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86_64": "odukgoi3kx2eduawtawhxjgtok3jfqkgahcv7ojcqzit7vsmjb43a"
+  }
 
 ## CommonsBase_Std.S7z@25.1.0
   $ get-object CommonsBase_Std.S7z@25.1.0 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-S7z-25.1.0.zip
-  [pass] object:owrhutti7kumuhb2tgsegh3j6hxejdcp2znkmbeikhe2ndmaxcfpq:CommonsBase_Std.S7z@25.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86": "owrhutti7kumuhb2tgsegh3j6hxejdcp2znkmbeikhe2ndmaxcfpq"
+  }
   $ get-object CommonsBase_Std.S7z@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z-25.1.0.zip
-  [pass] object:ozfuu4xhlzffo2ktwcoc2x6icwjid6pahadb2tzfilkxuvb4bodna:CommonsBase_Std.S7z@25.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86_64": "ozfuu4xhlzffo2ktwcoc2x6icwjid6pahadb2tzfilkxuvb4bodna"
+  }
   $ get-object CommonsBase_Std.S7z@25.1.0 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-S7z-25.1.0.zip
-  [pass] object:oewvzozoeln34j266zxompajlloauf6aegx2rmmpd6qmbssjhpv3a:CommonsBase_Std.S7z@25.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Darwin_arm64": "oewvzozoeln34j266zxompajlloauf6aegx2rmmpd6qmbssjhpv3a"
+  }
   $ get-object CommonsBase_Std.S7z@25.1.0 -s Release.Darwin_x86_64 -f ${RUNTIME}/Darwin_x86_64-S7z-25.1.0.zip
-  [pass] object:ouoanxsffna5q3rp4c6xbqlymxeqyn23jlgl3jr26z3qfl2trr2hq:CommonsBase_Std.S7z@25.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Darwin_x86_64": "ouoanxsffna5q3rp4c6xbqlymxeqyn23jlgl3jr26z3qfl2trr2hq"
+  }
   $ get-object CommonsBase_Std.S7z@25.1.0 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-S7z-25.1.0.zip
-  [pass] object:o33clvty5dzdsrtqpteutkrczsue6ap6t343x4lpqzszmz4zww6lq:CommonsBase_Std.S7z@25.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86": "o33clvty5dzdsrtqpteutkrczsue6ap6t343x4lpqzszmz4zww6lq"
+  }
   $ get-object CommonsBase_Std.S7z@25.1.0 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-S7z-25.1.0.zip
-  [pass] object:ox6ayhj7czysuvttlkf5y2gcledlbc5f6jzln6yw676dyarqq44la:CommonsBase_Std.S7z@25.1.0
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86_64": "ox6ayhj7czysuvttlkf5y2gcledlbc5f6jzln6yw676dyarqq44la"
+  }
 
 ## CommonsBase_Std.Fd@10.3.0
   $ get-object CommonsBase_Std.Fd@10.3.0 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-Fd-10.3.0.zip
-  [pass] object:o2b2kqcwtzv6lvyhhlpyt3c5h4ta55soiqz65iwh5adhfxi7e7bha:CommonsBase_Std.Fd@10.3.0
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86": "o2b2kqcwtzv6lvyhhlpyt3c5h4ta55soiqz65iwh5adhfxi7e7bha"
+  }
   $ get-object CommonsBase_Std.Fd@10.3.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Fd-10.3.0.zip
-  [pass] object:og64qa5u2b7o6m74qtzit2s7igwrrazmgnu7rvqvkodiqt72acwma:CommonsBase_Std.Fd@10.3.0
+  \test(pass)\dkobjects\;{
+    "Release.Windows_x86_64": "og64qa5u2b7o6m74qtzit2s7igwrrazmgnu7rvqvkodiqt72acwma"
+  }
   $ get-object CommonsBase_Std.Fd@10.3.0 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Fd-10.3.0.zip
-  [pass] object:oec26gwkarphvmy65f5szgai2jtfopzhppjvabmwof2obsdzgitcq:CommonsBase_Std.Fd@10.3.0
+  \test(pass)\dkobjects\;{
+    "Release.Darwin_arm64": "oec26gwkarphvmy65f5szgai2jtfopzhppjvabmwof2obsdzgitcq"
+  }
   $ get-object CommonsBase_Std.Fd@10.3.0 -s Release.Darwin_x86_64 -f ${RUNTIME}/Darwin_x86_64-Fd-10.3.0.zip
-  [pass] object:owuchj6gjfg4cedwvinhnd3cmwthotmt4tc75rjjdd65mu4bkk7ga:CommonsBase_Std.Fd@10.3.0
+  \test(pass)\dkobjects\;{
+    "Release.Darwin_x86_64": "owuchj6gjfg4cedwvinhnd3cmwthotmt4tc75rjjdd65mu4bkk7ga"
+  }
   $ get-object CommonsBase_Std.Fd@10.3.0 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-Fd-10.3.0.zip
-  [pass] object:ofwwxm32kqvnihhudpm4ivgouk27z4dlxfusalkh37r7ze4yl52qa:CommonsBase_Std.Fd@10.3.0
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86": "ofwwxm32kqvnihhudpm4ivgouk27z4dlxfusalkh37r7ze4yl52qa"
+  }
   $ get-object CommonsBase_Std.Fd@10.3.0 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-Fd-10.3.0.zip
-  [pass] object:ohl5svgnkijzgisrq2j34656jymrz7sqbtewx2r7zmlsiwbgea6xa:CommonsBase_Std.Fd@10.3.0
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86_64": "ohl5svgnkijzgisrq2j34656jymrz7sqbtewx2r7zmlsiwbgea6xa"
+  }
 
 ## CommonsBase_Std.Toybox@0.8.9
   $ get-object CommonsBase_Std.Toybox@0.8.9 -s Release.Linux_arm64 -f ${RUNTIME}/Linux_arm64-Toybox-0.8.9.zip
-  [pass] object:o4mzseh7byym2vyns5wsawvqu5qfh3ktlog67pxdqw7vilgrdgo7q:CommonsBase_Std.Toybox@0.8.9
+  \test(pass)\dkobjects\;{
+    "Release.Linux_arm64": "o4mzseh7byym2vyns5wsawvqu5qfh3ktlog67pxdqw7vilgrdgo7q"
+  }
   $ get-object CommonsBase_Std.Toybox@0.8.9 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-Toybox-0.8.9.zip
-  [pass] object:ojt47gnivpaxi74ecog3ha6eigs63di5tg2d62v4o3kuiobblgfza:CommonsBase_Std.Toybox@0.8.9
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86_64": "ojt47gnivpaxi74ecog3ha6eigs63di5tg2d62v4o3kuiobblgfza"
+  }
   $ get-object CommonsBase_Std.Toybox@0.8.9 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-Toybox-0.8.9.zip
-  [pass] object:osk2rjv7tarwm6sbplfvvt7b7w3fvrjnlwapbsuqgofjfi2tqyjwq:CommonsBase_Std.Toybox@0.8.9
+  \test(pass)\dkobjects\;{
+    "Release.Linux_x86": "osk2rjv7tarwm6sbplfvvt7b7w3fvrjnlwapbsuqgofjfi2tqyjwq"
+  }
