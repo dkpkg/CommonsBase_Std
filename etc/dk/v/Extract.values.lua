@@ -85,7 +85,7 @@ function CommonsBase_Std__Extract__0_1_0.common_params(request, p)
     "$(get-object CommonsBase_Std.Toybox@0.8.9 -s Release.%s -m ./toybox -f toybox.exe -e '*')",
     request.execution.ABIv3)
   local sevenzzexe = string.format(
-    "$(get-object CommonsBase_Std.S7z@25.1.0 -s Release.%s -m ./7zz.exe -f 7zz.exe -e '*')",
+    "$(get-object CommonsBase_Std.S7z@25.1.0 -s Release.%s -e '*' -d :)/7zz.exe",
     request.execution.ABIv3)
   local sevenzexe_win32 = string.format(
     "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.%s -d :)/7z.exe",
