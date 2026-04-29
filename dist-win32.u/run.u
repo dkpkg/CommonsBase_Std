@@ -54,7 +54,8 @@ CommonsBase_Std.Fd requires CommonsBase_Std.Extract0.
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   'paths[]=somefile'
   \test(pass)\dkobjects\;{
-    "Release.Agnostic": "ovvokh5jjg4jwgyesncmhkwpbjbugtcy373gullhxmdhgbcsaoozq"
+    "Release.Agnostic": "ovvokh5jjg4jwgyesncmhkwpbjbugtcy373gullhxmdhgbcsaoozq",
+    "Release.Windows_x86_64": "og4gklvlqcdjg644mypq65v7xbj3jcsc754yehemu43n4xx5452pa"
   }
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
@@ -91,7 +92,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.1.0
   \test(pass)\dkobjects\;{
-    "Release.Agnostic": "oxy4lf5ymwrqm52mkn4ylkorwd32ewau2vgsogleno2blw6hsstsq"
+    "Release.Windows_x86_64": "oqs3ambbirpjv74d3klbi6z27wz5wudeo6izcmtp5xfov6ngqqhzq"
   }
 
 ## CommonsBase_Std.S7z.S7zr@25.1.0

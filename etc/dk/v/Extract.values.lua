@@ -16,8 +16,12 @@ function rules.F_Untar(command, request)
       declareoutput = {
         return_objects = {
           id = modver,
-          slots = { "Release.Agnostic" },
-          execution_slot = "Release.Agnostic"
+          slots = {
+                    "Release.Windows_x86", "Release.Windows_x86_64", "Release.Windows_arm64",
+                    "Release.Darwin_x86_64", "Release.Darwin_arm64",
+                    "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
+          },
+          execution_slot = "Release.execution_abi"
         }
       }
     }
@@ -28,19 +32,7 @@ function rules.F_Untar(command, request)
       paths = paths
     }
     CommonsBase_Std__Extract__0_1_0.common_params(request, p)
-    if request.execution.OSFamily == "macos" then
-      return CommonsBase_Std__Extract__0_1_0.untar_macos(p)
-    elseif request.execution.OSFamily == "linux" then
-      return CommonsBase_Std__Extract__0_1_0.untar_linux(p)
-    elseif request.execution.OSFamily == "windows" then
-      if p.gzip or p.xz or p.bz2 then
-        return CommonsBase_Std__Extract__0_1_0.untarsomez_win32(p)
-      else
-        return CommonsBase_Std__Extract__0_1_0.untar_win32(p)
-      end
-    else
-      error("unsupported OSFamily: " .. request.execution.OSFamily)
-    end
+    return CommonsBase_Std__Extract__0_1_0.untar(p)
   end
 end
 
@@ -51,27 +43,19 @@ function rules.F_TarToZip(command, request)
       declareoutput = {
         return_objects = {
           id = modver,
-          slots = { "Release.Agnostic" },
-          execution_slot = "Release.Agnostic"
+          slots = {
+            "Release.Windows_x86", "Release.Windows_x86_64", "Release.Windows_arm64",
+            "Release.Darwin_x86_64", "Release.Darwin_arm64",
+            "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
+          },
+          execution_slot = "Release.execution_abi"
         }
       }
     }
   elseif command == "submit" then
     local p = {}
     CommonsBase_Std__Extract__0_1_0.common_params(request, p)
-    if request.execution.OSFamily == "macos" then
-      return CommonsBase_Std__Extract__0_1_0.tartozip_macos(p)
-    elseif request.execution.OSFamily == "linux" then
-      return CommonsBase_Std__Extract__0_1_0.tartozip_linux(p)
-    elseif request.execution.OSFamily == "windows" then
-      if p.gzip or p.xz or p.bz2 then
-        return CommonsBase_Std__Extract__0_1_0.tartozip_somez_win32(p)
-      else
-        return CommonsBase_Std__Extract__0_1_0.tartozip_win32(p)
-      end
-    else
-      error("unsupported OSFamily: " .. request.execution.OSFamily)
-    end
+    return CommonsBase_Std__Extract__0_1_0.tartozip(p)
   end
 end
 
@@ -81,18 +65,10 @@ function CommonsBase_Std__Extract__0_1_0.common_params(request, p)
   local gzip = string.find(tarassetpath, "%.tar%.gz$") ~= nil
   local xz = string.find(tarassetpath, "%.tar%.xz$") ~= nil
   local bz2 = string.find(tarassetpath, "%.tar%.bz2$") ~= nil
-  local toyboxexe = string.format(
-    "$(get-object CommonsBase_Std.Toybox@0.8.9 -s Release.%s -m ./toybox -f toybox.exe -e '*')",
-    request.execution.ABIv3)
-  local sevenzzexe = string.format(
-    "$(get-object CommonsBase_Std.S7z@25.1.0 -s Release.%s -e '*' -d :)/7zz.exe",
-    request.execution.ABIv3)
-  local sevenzexe_win32 = string.format(
-    "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.%s -d :)/7z.exe",
-    request.execution.ABIv3)
-  local coreutilsexe = string.format(
-    "$(get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.%s -m ./coreutils.exe -f coreutils.exe -e '*')",
-    request.execution.ABIv3)
+  local toyboxexe = "$(get-object CommonsBase_Std.Toybox@0.8.9 -s Release.execution_abi -m ./toybox -f toybox.exe -e '*')"
+  local sevenzzexe = "$(get-object CommonsBase_Std.S7z@25.1.0 -s Release.execution_abi -e '*' -d :)/7zz.exe"
+  local sevenzexe_win32 = "$(get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.execution_abi -d :)/7z.exe"
+  local coreutilsexe = "$(get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.execution_abi -m ./coreutils.exe -f coreutils.exe -e '*')"
 
   -- /a/b/c.tar.gz -> ("z", /a/b/c.tar)
   -- /a/b/c.tar.xz -> ("J", /a/b/c.tar)
@@ -135,7 +111,89 @@ function CommonsBase_Std__Extract__0_1_0.common_params(request, p)
   p.coreutilsexe = coreutilsexe
 end
 
-function CommonsBase_Std__Extract__0_1_0.untar_macos(p)
+function CommonsBase_Std__Extract__0_1_0.untar(p)
+  local commands = {
+    -- macOS system tar
+    {
+      "/usr/bin/tar", "-x" .. p.tarcompressflag .. "f",
+      p.tarfile,
+      "-C", "${SLOT.Release.Darwin_arm64}" },
+    {
+      "/usr/bin/tar", "-x" .. p.tarcompressflag .. "f",
+      p.tarfile,
+      "-C", "${SLOT.Release.Darwin_x86_64}" },
+    -- toybox for Linux
+    {
+      p.toyboxexe, "tar", "-x" .. p.tarcompressflag .. "f",
+      p.tarfile,
+      "-C", "${SLOT.Release.Linux_arm64}" },
+    {
+      p.toyboxexe, "tar", "-x" .. p.tarcompressflag .. "f",
+      p.tarfile,
+      "-C", "${SLOT.Release.Linux_x86_64}" },
+    {
+      p.toyboxexe, "tar", "-x" .. p.tarcompressflag .. "f",
+      p.tarfile,
+      "-C", "${SLOT.Release.Linux_x86}" },
+  }
+  if p.gzip or p.xz or p.bz2 then
+        -- extract the .tar.gz/.tar.xz/.tar.bz2 to a .tar
+          -- with [env -u] so runs on Windows slots only
+          -- with [7z.exe] ...
+          -- uncompress
+          -- to current directory
+          -- the .tar.gz
+          -- select the .tar extracted output
+    table.insert(commands, {
+        p.coreutilsexe, "env", "-u", "${SLOT.Release.Windows_x86}", "--",
+        p.sevenzexe_win32, "x",
+        "-o.", p.tarfile, p.file_tar_basename
+      })
+    table.insert(commands, {
+        p.coreutilsexe, "env", "-u", "first", "-u", "${SLOT.Release.Windows_x86_64}", "--",
+        p.sevenzexe_win32, "x",
+        "-o.", p.tarfile, p.file_tar_basename
+      })
+    table.insert(commands, {
+        p.coreutilsexe, "env", "-u", "${SLOT.Release.Windows_arm64}", "--",
+        p.sevenzexe_win32, "x",
+        "-o.", p.tarfile, p.file_tar_basename
+      })
+        -- extract the .tar
+          -- with [7z.exe] ...
+          -- uncompress
+          -- to output directory
+          -- the tarball
+    table.insert(commands, {
+        p.sevenzexe_win32, "x",
+        "-o${SLOT.Release.Windows_x86}",
+        p.file_tar_basename
+      })
+    table.insert(commands, {
+        p.sevenzexe_win32, "x",
+        "-o${SLOT.Release.Windows_x86_64}",
+        p.file_tar_basename
+      })
+    table.insert(commands, {
+        p.sevenzexe_win32, "x",
+        "-o${SLOT.Release.Windows_arm64}",
+        p.file_tar_basename
+      })
+  else
+        -- with [7z.exe] ...
+        -- uncompress
+        -- to output directory
+        -- the tarball
+    table.insert(commands, {
+        p.sevenzexe_win32, "x", "-o${SLOT.Release.Windows_x86}",
+        p.tarfile})
+    table.insert(commands, {
+        p.sevenzexe_win32, "x", "-o${SLOT.Release.Windows_x86_64}",
+        p.tarfile})
+    table.insert(commands, {
+        p.sevenzexe_win32, "x", "-o${SLOT.Release.Windows_arm64}",
+        p.tarfile})
+  end
   return {
     submit = {
       values = {
@@ -144,20 +202,16 @@ function CommonsBase_Std__Extract__0_1_0.untar_macos(p)
           {
             id = p.outputid,
             function_ = {
-              execution = { { name = "OSFamily", value = "macos" } },
-              commands = {
-                { -- macOS system tar
-                  "/usr/bin/tar",
-                  "-x" .. p.tarcompressflag .. "f",
-                  p.tarfile,
-                  "-C",
-                  "${SLOT.Release.Agnostic}" }
-              }
+              commands = commands
             },
             outputs = {
               assets = {
                 {
-                  slots = { "Release.Agnostic" },
+                  slots = {
+                    "Release.Windows_x86", "Release.Windows_x86_64", "Release.Windows_arm64",
+                    "Release.Darwin_x86_64", "Release.Darwin_arm64",
+                    "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
+                  },
                   paths = p.paths
                 }
               }
@@ -169,122 +223,151 @@ function CommonsBase_Std__Extract__0_1_0.untar_macos(p)
   }
 end
 
-function CommonsBase_Std__Extract__0_1_0.tartozip_macos(p)
-  return {
-    submit = {
-      values = {
-        schema_version = { major = 1, minor = 0 },
-        forms = {
-          {
-            id = p.outputid,
-            function_ = {
-              execution = { { name = "OSFamily", value = "macos" } },
-              commands = {
-                { -- macOS system tar
-                  "/usr/bin/tar",
-                  "-x" .. p.tarcompressflag .. "f",
-                  p.tarfile
-                },
-                {
-                  -- [p.sevenzzee] is 7zz
-                  p.sevenzzexe,
-                  "a",
-                  "${SLOT.Release.Agnostic}/output.zip"
-                }
-              }
-            },
-            outputs = {
-              assets = {
-                {
-                  slots = { "Release.Agnostic" },
-                  paths = { "output.zip" }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+function CommonsBase_Std__Extract__0_1_0.tartozip_win32_helper(win32_commands, p, slot)
+  table.insert(win32_commands,
+    {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release." .. slot .. "}", "--",
+      -- with [7z.exe] ...
+      p.sevenzexe_win32,
+      -- uncompress
+      "x",
+      -- to current directory
+      "-o.",
+      -- the .tar.gz
+      p.tarfile,
+      -- select the .tar extracted output
+      p.file_tar_basename
+    })
+    -- make temp directory
+  table.insert(win32_commands, {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release." .. slot .. "}", "--",
+      p.coreutilsexe,
+      "mkdir",
+      "${CACHE}"
+    })
+    -- move the .tar to a temp directory
+  table.insert(win32_commands,{
+      p.coreutilsexe, "env", "-u", "${SLOT.Release." .. slot .. "}", "--",
+      p.coreutilsexe,
+      "mv",
+      p.file_tar_basename,
+      "${CACHE}/" .. p.file_tar_basename
+    })
+    -- extract the .tar
+  table.insert(win32_commands, {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release." .. slot .. "}", "--",
+      -- with [7z.exe] ...
+      p.sevenzexe_win32,
+      -- uncompress
+      "x",
+      -- to current directory
+      "-o.",
+      -- the tarball
+      "${CACHE}/" .. p.file_tar_basename
+    })
+    -- remove the .tar from the temp directory
+    table.insert(win32_commands, {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release." .. slot .. "}", "--",
+      p.coreutilsexe,
+      "rm",
+      "${CACHE}/" .. p.file_tar_basename
+    })
 end
 
-function CommonsBase_Std__Extract__0_1_0.untar_linux(p)
-  return {
-    submit = {
-      values = {
-        schema_version = { major = 1, minor = 0 },
-        forms = {
-          {
-            id = p.outputid,
-            function_ = {
-              execution = { { name = "OSFamily", value = "linux" } },
-              commands = {
-                {
-                  p.toyboxexe,
-                  "tar",
-                  "-x" .. p.tarcompressflag .. "f",
-                  p.tarfile,
-                  "-C",
-                  "${SLOT.Release.Agnostic}"
-                } }
-            },
-            outputs = {
-              assets = {
-                {
-                  slots = { "Release.Agnostic" },
-                  paths = p.paths
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-end
+function CommonsBase_Std__Extract__0_1_0.tartozip(p)
+  local commands = {
+    -- macOS
+      -- macOS system tar
+      -- with [env -u] so runs on macOS slots only
+    {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release.Darwin_x86_64}", "--",
+      "/usr/bin/tar",
+      "-x" .. p.tarcompressflag .. "f",
+      p.tarfile
+    },
+    {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release.Darwin_arm64}", "--",
+      "/usr/bin/tar",
+      "-x" .. p.tarcompressflag .. "f",
+      p.tarfile
+    },
+      -- [p.sevenzzee] is 7zz
+    {
+      p.sevenzzexe, "a",
+      "${SLOT.Release.Darwin_x86_64}/output.zip"
+    },
+    {
+      p.sevenzzexe, "a",
+      "${SLOT.Release.Darwin_arm64}/output.zip"
+    },
 
-function CommonsBase_Std__Extract__0_1_0.tartozip_linux(p)
-  return {
-    submit = {
-      values = {
-        schema_version = { major = 1, minor = 0 },
-        forms = {
-          {
-            id = p.outputid,
-            function_ = {
-              execution = { { name = "OSFamily", value = "linux" } },
-              commands = {
-                {
-                  p.toyboxexe,
-                  "tar",
-                  "-x" .. p.tarcompressflag .. "f",
-                  p.tarfile
-                },
-                {
-                  -- [p.sevenzzee] is 7zz
-                  p.sevenzzexe,
-                  "a",
-                  "${SLOT.Release.Agnostic}/output.zip"
-                }
-              }
-            },
-            outputs = {
-              assets = {
-                {
-                  slots = { "Release.Agnostic" },
-                  paths = { "output.zip" }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    -- Linux
+      -- with [env -u] so runs on macOS slots only
+    {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release.Linux_x86_64}", "--",
+      p.toyboxexe,
+      "tar", "-x" .. p.tarcompressflag .. "f", p.tarfile
+    },
+    {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release.Linux_arm64}", "--",
+      p.toyboxexe,
+      "tar", "-x" .. p.tarcompressflag .. "f", p.tarfile
+    },
+    {
+      p.coreutilsexe, "env", "-u", "${SLOT.Release.Linux_x86}", "--",
+      p.toyboxexe,
+      "tar", "-x" .. p.tarcompressflag .. "f", p.tarfile
+    },
+      -- [p.sevenzzee] is 7zz
+    {
+      p.sevenzzexe, "a",
+      "${SLOT.Release.Linux_x86_64}/output.zip"
+    },
+    {
+      p.sevenzzexe, "a",
+      "${SLOT.Release.Linux_x86}/output.zip"
+    },
+    {
+      p.sevenzzexe, "a",
+      "${SLOT.Release.Linux_arm64}/output.zip"
+    },
   }
-end
 
--- tar.gz, tar.xz or tar.bz2
-function CommonsBase_Std__Extract__0_1_0.untarsomez_win32(p)
+  if p.gzip or p.xz or p.bz2 then
+    CommonsBase_Std__Extract__0_1_0.tartozip_win32_helper(commands, p, "Windows_x86")
+    CommonsBase_Std__Extract__0_1_0.tartozip_win32_helper(commands, p, "Windows_x86_64")
+    CommonsBase_Std__Extract__0_1_0.tartozip_win32_helper(commands, p, "Windows_arm64")
+  else
+      -- extract the .tar
+        -- with [env -u] so runs on Windows slots only
+        -- with [7z.exe] ...
+        -- uncompress
+        -- to current directory
+        -- the tarball
+    table.insert(commands, {
+        p.coreutilsexe, "env", "-u", "${SLOT.Release.Windows_x86}", "--",
+        p.sevenzexe_win32, "x", "-o.", p.tarfile
+      })
+    table.insert(commands, {
+        p.coreutilsexe, "env", "-u", "${SLOT.Release.Windows_x86_64}", "--",
+        p.sevenzexe_win32, "x", "-o.", p.tarfile
+      })
+    table.insert(commands, {
+        p.coreutilsexe, "env", "-u", "${SLOT.Release.Windows_arm64}", "--",
+        p.sevenzexe_win32, "x", "-o.", p.tarfile
+      })
+  end
+  -- (windows) create output.zip from the .tar
+  table.insert(commands, {
+    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_x86}/output.zip"
+  })
+  table.insert(commands, {
+    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_x86_64}/output.zip"
+  })
+  table.insert(commands, {
+    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_arm64}/output.zip"
+  })
+
   return {
     submit = {
       values = {
@@ -293,197 +376,16 @@ function CommonsBase_Std__Extract__0_1_0.untarsomez_win32(p)
           {
             id = p.outputid,
             function_ = {
-              execution = { { name = "OSFamily", value = "windows" } },
-              commands = {
-                -- extract the .tar.gz/.tar.xz/.tar.bz2 to a .tar
-                {
-                  -- with [7z.exe] ...
-                  p.sevenzexe_win32,
-                  -- uncompress
-                  "x",
-                  -- to current directory
-                  "-o.",
-                  -- the .tar.gz
-                  p.tarfile,
-                  -- select the .tar extracted output
-                  p.file_tar_basename
-                },
-                -- extract the .tar
-                {
-                  -- with [7z.exe] ...
-                  p.sevenzexe_win32,
-                  -- uncompress
-                  "x",
-                  -- to output directory
-                  "-o${SLOT.Release.Agnostic}",
-                  -- the tarball
-                  p.file_tar_basename
-                } }
+              commands = commands
             },
             outputs = {
               assets = {
                 {
-                  slots = { "Release.Agnostic" },
-                  paths = p.paths
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-end
-
-function CommonsBase_Std__Extract__0_1_0.tartozip_somez_win32(p)
-  return {
-    submit = {
-      values = {
-        schema_version = { major = 1, minor = 0 },
-        forms = {
-          {
-            id = p.outputid,
-            function_ = {
-              execution = { { name = "OSFamily", value = "windows" } },
-              commands = {
-                -- extract the .tar.gz/.tar.xz/.tar.bz2 to a .tar
-                {
-                  -- with [7z.exe] ...
-                  p.sevenzexe_win32,
-                  -- uncompress
-                  "x",
-                  -- to current directory
-                  "-o.",
-                  -- the .tar.gz
-                  p.tarfile,
-                  -- select the .tar extracted output
-                  p.file_tar_basename
-                },
-                -- make temp directory
-                {
-                  p.coreutilsexe,
-                  "mkdir",
-                  "${CACHE}"
-                },
-                -- move the .tar to a temp directory
-                {
-                  p.coreutilsexe,
-                  "mv",
-                  p.file_tar_basename,
-                  "${CACHE}/" .. p.file_tar_basename
-                },
-                -- extract the .tar
-                {
-                  -- with [7z.exe] ...
-                  p.sevenzexe_win32,
-                  -- uncompress
-                  "x",
-                  -- to current directory
-                  "-o.",
-                  -- the tarball
-                  "${CACHE}/" .. p.file_tar_basename
-                },
-                -- remove the .tar from the temp directory
-                {
-                  p.coreutilsexe,
-                  "rm",
-                  "${CACHE}/" .. p.file_tar_basename
-                },
-                -- create output.zip from the .tar
-                {
-                  -- with [7z.exe] ...
-                  p.sevenzexe_win32,
-                  "a",
-                  "${SLOT.Release.Agnostic}/output.zip"
-                }
-              }
-            },
-            outputs = {
-              assets = {
-                {
-                  slots = { "Release.Agnostic" },
-                  paths = { "output.zip" }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-end
-
-function CommonsBase_Std__Extract__0_1_0.untar_win32(p)
-  return {
-    submit = {
-      values = {
-        schema_version = { major = 1, minor = 0 },
-        forms = {
-          {
-            id = p.outputid,
-            function_ = {
-              execution = { { name = "OSFamily", value = "windows" } },
-              commands = {
-                -- with [7z.exe] ...
-                p.sevenzexe_win32,
-                -- uncompress
-                "x",
-                -- to output directory
-                "-o${SLOT.Release.Agnostic}",
-                -- the tarball
-                p.tarfile
-              }
-            },
-            outputs = {
-              assets = {
-                {
-                  slots = { "Release.Agnostic" },
-                  paths = p.paths
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-end
-
-function CommonsBase_Std__Extract__0_1_0.tartozip_win32(p)
-  return {
-    submit = {
-      values = {
-        schema_version = { major = 1, minor = 0 },
-        forms = {
-          {
-            id = p.outputid,
-            function_ = {
-              execution = { { name = "OSFamily", value = "windows" } },
-              commands = {
-                -- extract the .tar
-                {
-                  -- with [7z.exe] ...
-                  p.sevenzexe_win32,
-                  -- uncompress
-                  "x",
-                  -- to current directory
-                  "-o.",
-                  -- the tarball
-                  p.tarfile
-                },
-                -- create output.zip from the .tar
-                {
-                  -- with [7z.exe] ...
-                  p.sevenzexe_win32,
-                  "a",
-                  "${SLOT.Release.Agnostic}/output.zip"
-                }
-              }
-            },
-            outputs = {
-              assets = {
-                {
-                  slots = { "Release.Agnostic" },
+                  slots = {
+                    "Release.Windows_x86", "Release.Windows_x86_64", "Release.Windows_arm64",
+                    "Release.Darwin_x86_64", "Release.Darwin_arm64",
+                    "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
+                  },
                   paths = { "output.zip" }
                 }
               }
