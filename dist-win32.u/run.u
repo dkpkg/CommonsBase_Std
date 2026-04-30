@@ -6,7 +6,7 @@ We'll make a nano-sized tarball for testing the tarball extraction rules.
 ... The tarball contains a single file "somefile" with the content "hello world".
 ... The tarball was created with macOS `bsdtar 3.5.3 - libarchive 3.7.4 zlib/1.2.12 liblzma/5.4.3 bz2lib/1.0.8`
 ... with the command `tar -cf nano.tar somefile`.
-  % return unified.asset { name="Nano", file="nano.tar" }
+  % unified.asset { name="Nano", file="nano.tar" }
   'asset'
   '2048'
   'sha256:791b8d0be20f8dfa6b7c08f6d16909c693a5f3aadbb0db4d846b32193184bbd9'
