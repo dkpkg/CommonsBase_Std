@@ -210,6 +210,10 @@ Others: the S7z object
   \test(pass)\dkobjects\;{
     "Release.Linux_x86_64": "ohl5svgnkijzgisrq2j34656jymrz7sqbtewx2r7zmlsiwbgea6xa"
   }
+  $ get-object CommonsBase_Std.Fd@10.3.0 -s Release.Linux_arm64 -f ${RUNTIME}/Linux_arm64-Fd-10.3.0.zip
+  \test(pass)\dkobjects\;{
+    "Release.Linux_arm64": "oeu7vsja2xzynwadakgbrqafy6sagqa6e7ogqdr5atsjg3lo76uqq"
+  }
 
 ## CommonsBase_Std.Toybox@0.8.9
   $ get-object CommonsBase_Std.Toybox@0.8.9 -s Release.Linux_arm64 -f ${RUNTIME}/Linux_arm64-Toybox-0.8.9.zip

@@ -12,6 +12,8 @@ rules = build.newrules(M)
 function rules.F_Untar(command, request)
   if command == "declareoutput" then
     local modver = assert(request.user.modver, "please provide `modver=MODULE@VERSION`")
+    local tarmodver = assert(request.user.tarmodver, "please provide `tarmodver=MODULE@VERSION`")
+    local tarassetpath = assert(request.user.tarassetpath, "please provide `tarassetpath=ASSETPATH`")
     return {
       declareoutput = {
         return_objects = {
@@ -22,6 +24,9 @@ function rules.F_Untar(command, request)
                     "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
           },
           execution_slot = "Release.execution_abi"
+        },
+        input_assets = {
+          { id = tarmodver, path = tarassetpath }
         }
       }
     }
@@ -39,6 +44,8 @@ end
 function rules.F_TarToZip(command, request)
   if command == "declareoutput" then
     local modver = assert(request.user.modver, "please provide `modver=MODULE@VERSION`")
+    local tarmodver = assert(request.user.tarmodver, "please provide `tarmodver=MODULE@VERSION`")
+    local tarassetpath = assert(request.user.tarassetpath, "please provide `tarassetpath=ASSETPATH`")
     return {
       declareoutput = {
         return_objects = {
@@ -49,6 +56,9 @@ function rules.F_TarToZip(command, request)
             "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
           },
           execution_slot = "Release.execution_abi"
+        },
+        input_assets = {
+          { id = tarmodver, path = tarassetpath }
         }
       }
     }
