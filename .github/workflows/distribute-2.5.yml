@@ -23,6 +23,7 @@ jobs:
         include:
           - runs-on: windows-2022 # CommonsBase_Std requires Windows to use S7z
             distscript: dist-win32.u
+            execution-abi: Windows_x86_64
 
     runs-on: ${{ matrix.runs-on }}
     steps:
@@ -41,6 +42,7 @@ jobs:
             options: -nosysinc
             use-cache: true
             distscript: ${{ matrix.distscript }}
+            execution-abi: ${{ matrix.execution-abi }}
             experimental-dk-owner: ${{ github.repository_owner == 'dkpkg' && 'diskuv' || github.repository_owner }}
             #   Use MlFront HEAD when CI build is not from a tag
             experimental-mlfront-ref: ${{ github.ref_type != 'tag' && 'HEAD' }}
