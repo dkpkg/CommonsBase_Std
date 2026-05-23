@@ -111,7 +111,7 @@ Others: the S7z object
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ongej4aws6ba52biqs73qvv4ptg4zq72bb4h5zqx4w4og2o3i2d2a")\;
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Windows_arm64 -f ${RUNTIME}/Windows_arm64-Coreutils-0.6.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Windows_arm64", value-id: "?")\;
+  \dk.object(abi: "Release.Windows_arm64", value-id: "oak4jdj2s5xbouebabnqgnzqnb46bnjhpbp24ohtu7vfwytjgbhdq")\;
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Coreutils-0.6.0.zip
   \test(pass)
   \dk.object(abi: "Release.Darwin_arm64", value-id: "oyv54m53grktwjg3vkeze4i6i5paxkt4vw4z57irnp7ouosfvj5ka")\;
