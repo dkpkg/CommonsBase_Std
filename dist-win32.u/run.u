@@ -102,45 +102,25 @@ Others: the S7z object
   \test(pass)
   \dk.object(abi: "Release.Windows_x86_64", value-id: "oskdjufi6rrzq6tavtjxeo4kjnxmykq7cfquiez77hmkp754rfwaq")\;
 
-## CommonsBase_Std.Coreutils@0.2.2
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Windows_x86", value-id: "o7gntafiirl4vibmnv34tc42eqtgh72ccsnnvqwvlttf27k4hf2tq")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "o2npj4ay7c5zfbegeolrrtvgxciwvdi7mly4wjgeu2ibqgnsuqpja")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Darwin_arm64", value-id: "obcu2tfsu7kfxosyejj3anoqsyiphz5ls7aptrfggaknydh5j7pta")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Darwin_x86_64 -f ${RUNTIME}/Darwin_x86_64-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Darwin_x86_64", value-id: "olw7vbbketz3zeoqa4vkikeun7hbwejatareohhpg6cnlxw5qqohq")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Linux_x86", value-id: "orbpkvubnlvghxbzwr4fhcgzuvw7hyhn3n2sygck527ow5yjzsjzq")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Linux_x86_64", value-id: "oug247u2tcxvroijdfyv42znb7qnt2ygrlrqw44crn6jlaethovaa")\;
-
 ## CommonsBase_Std.Coreutils@0.6.0
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-Coreutils-0.6.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86", value-id: "ont7ofo7gfvvjmnrcbaqamnuq25xlwvthjgh5e2w6w65xbfythsda")\;
+  \dk.object(abi: "Release.Windows_x86", value-id: "oxcrnchneb3j2rh66tqckmlc3kjseluabtejlklanfavh62d4aq2q")\;
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.6.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "oei7stxtfiulvf5d43vgceu52iwfkriwlkovfwagkyza6iisfh3yq")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ongej4aws6ba52biqs73qvv4ptg4zq72bb4h5zqx4w4og2o3i2d2a")\;
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Coreutils-0.6.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Darwin_arm64", value-id: "o7vxqdcyw5ob33ncqtep4qwlmpdfs3d4l446chiftodnwd34cf37a")\;
+  \dk.object(abi: "Release.Darwin_arm64", value-id: "oyv54m53grktwjg3vkeze4i6i5paxkt4vw4z57irnp7ouosfvj5ka")\;
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Darwin_x86_64 -f ${RUNTIME}/Darwin_x86_64-Coreutils-0.6.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Darwin_x86_64", value-id: "oohroq4h3lm2xpwc2mofm5hbqjkzbmnyzihc5aoggrvl3f72c3qra")\;
+  \dk.object(abi: "Release.Darwin_x86_64", value-id: "o2f5cgwchqmugvwttjsuuvfou4spixnoajfjiog72bjz3efwfx3fq")\;
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-Coreutils-0.6.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Linux_x86", value-id: "ojoe2g3duui2nrhf6mb3nbf66443kvg5q7nstllo2piihv2admyxq")\;
+  \dk.object(abi: "Release.Linux_x86", value-id: "ochop4773prwkasi7i3qijz4gx7wt5kv7gqdwqkmmanysyibd4dda")\;
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-Coreutils-0.6.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Linux_x86_64", value-id: "odukgoi3kx2eduawtawhxjgtok3jfqkgahcv7ojcqzit7vsmjb43a")\;
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "osyay2l2zuejtk7kn63sdsuwok47vasr25aa3y7opzblhwwgtzcmq")\;
 
 ## CommonsBase_Std.S7z@25.1.0
   $ get-object CommonsBase_Std.S7z@25.1.0 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-S7z-25.1.0.zip
