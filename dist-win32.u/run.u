@@ -109,6 +109,9 @@ Others: the S7z object
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.6.0.zip
   \test(pass)
   \dk.object(abi: "Release.Windows_x86_64", value-id: "oei7stxtfiulvf5d43vgceu52iwfkriwlkovfwagkyza6iisfh3yq")\;
+  $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Windows_arm64 -f ${RUNTIME}/Windows_arm64-Coreutils-0.6.0.zip
+  \test(pass)
+  \dk.object(abi: "Release.Windows_arm64", value-id: "?")\;
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Coreutils-0.6.0.zip
   \test(pass)
   \dk.object(abi: "Release.Darwin_arm64", value-id: "o7vxqdcyw5ob33ncqtep4qwlmpdfs3d4l446chiftodnwd34cf37a")\;
