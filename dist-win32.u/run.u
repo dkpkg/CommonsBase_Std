@@ -102,26 +102,6 @@ Others: the S7z object
   \test(pass)
   \dk.object(abi: "Release.Windows_x86_64", value-id: "oskdjufi6rrzq6tavtjxeo4kjnxmykq7cfquiez77hmkp754rfwaq")\;
 
-## CommonsBase_Std.Coreutils@0.2.2
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Windows_x86", value-id: "o7gntafiirl4vibmnv34tc42eqtgh72ccsnnvqwvlttf27k4hf2tq")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "o2npj4ay7c5zfbegeolrrtvgxciwvdi7mly4wjgeu2ibqgnsuqpja")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Darwin_arm64", value-id: "obcu2tfsu7kfxosyejj3anoqsyiphz5ls7aptrfggaknydh5j7pta")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Darwin_x86_64 -f ${RUNTIME}/Darwin_x86_64-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Darwin_x86_64", value-id: "olw7vbbketz3zeoqa4vkikeun7hbwejatareohhpg6cnlxw5qqohq")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Linux_x86", value-id: "orbpkvubnlvghxbzwr4fhcgzuvw7hyhn3n2sygck527ow5yjzsjzq")\;
-  $ get-object CommonsBase_Std.Coreutils@0.2.2 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-Coreutils-0.2.2.zip
-  \test(pass)
-  \dk.object(abi: "Release.Linux_x86_64", value-id: "oug247u2tcxvroijdfyv42znb7qnt2ygrlrqw44crn6jlaethovaa")\;
-
 ## CommonsBase_Std.Coreutils@0.6.0
   $ get-object CommonsBase_Std.Coreutils@0.6.0 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-Coreutils-0.6.0.zip
   \test(pass)
