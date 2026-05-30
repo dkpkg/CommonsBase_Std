@@ -1,1 +1,10 @@
 ﻿## workspace
+
+## Assets
+
+### CommonsBase_Std.Assets@0.1.0
+
+  % unified.asset { name="RustAbi", dir="assets/table/rust-abi" }
+  'asset'
+  '2254'
+  { 'sha256:beebabb1c5ebb581b0f265180d543812cd11c3431f97380234599962834ce85c' }

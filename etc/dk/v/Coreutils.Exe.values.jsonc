@@ -1,26 +1,12 @@
 // Testing:
-//  ./dk0 get-object CommonsBase_Std.Coreutils.Exe@0.2.2 -s Release.Darwin_arm64 -d target\coreutils-tarmacarm64
-//  ./dk0 -I .\pkgs\include\CommonsBase_Std -d intermediate --tracestore V:\dk\cts --valuestore V:\dk\val --autofix --verbose -x gh-uutils:subpath: -x 7zip-org:subpath: get-object CommonsBase_Std.Coreutils.Exe@0.2.2 -s Release.Darwin_arm64 -d target\coreutils-exe-macarm64
+//  ./dk0 get-object CommonsBase_Std.Coreutils.Exe@0.8.0 -s Release.Darwin_arm64 -d target\coreutils-tarmacarm64
+//  ./dk0 -I .\pkgs\include\CommonsBase_Std -d intermediate --tracestore V:\dk\cts --valuestore V:\dk\val --autofix --verbose -x gh-uutils:subpath: -x 7zip-org:subpath: get-object CommonsBase_Std.Coreutils.Exe@0.8.0 -s Release.Darwin_arm64 -d target\coreutils-exe-macarm64
 {
   "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
   "schema_version": { "major": 1, "minor": 0 },
   "forms": [
     {
-      "id": "CommonsBase_Std.Coreutils.Exe@0.2.2",
-      "precommands": {
-        "private": [
-          // need macOS and Linux tar files. since same destination directory need [install-object]
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Darwin_arm64 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Darwin_x86_64 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Linux_arm64_gnu -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Linux_arm64 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Linux_arm -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Linux_x86_gnu -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Linux_x86 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Linux_x86_64 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.2.2 -s Release.Linux_x86_64_gnu -d tarballs"
-        ]
-      },
+      "id": "CommonsBase_Std.Coreutils.Exe@0.8.0",
       "function": {
         "execution": [
           // 7z.exe only runs on Windows
@@ -36,8 +22,8 @@
           "e",
           // to output directory for slot [Release.Darwin_arm64] (etc.)
           "-o${SLOT.request}",
-          // from the object [coreutils.Release.Darwin_arm64.tar] (etc.)
-          "tarballs/coreutils.${SLOTNAME.request}.tar"
+          // from the object [coreutils.tar]
+          "$(get-object CommonsBase_Std.Coreutils.Tar@0.8.0 -s ${SLOTNAME.request} -d :)/coreutils.tar"
         ]
       },
       "outputs": {
@@ -66,20 +52,6 @@
     },
     {
       "id": "CommonsBase_Std.Coreutils.Exe@0.6.0",
-      "precommands": {
-        "private": [
-          // need macOS and Linux tar files. since same destination directory need [install-object]
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Darwin_arm64 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Darwin_x86_64 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Linux_arm64_gnu -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Linux_arm64 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Linux_arm -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Linux_x86_gnu -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Linux_x86 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Linux_x86_64 -d tarballs",
-          "install-object CommonsBase_Std.Coreutils.Tar@0.6.0 -s Release.Linux_x86_64_gnu -d tarballs"
-        ]
-      },
       "function": {
         "execution": [
           // 7z.exe only runs on Windows
@@ -95,8 +67,8 @@
           "e",
           // to output directory for slot [Release.Darwin_arm64] (etc.)
           "-o${SLOT.request}",
-          // from the object [coreutils.Release.Darwin_arm64.tar] (etc.)
-          "tarballs/coreutils.${SLOTNAME.request}.tar"
+          // from the object [coreutils.tar]
+          "$(get-object CommonsBase_Std.Coreutils.Tar@0.8.0 -s ${SLOTNAME.request} -d :)/coreutils.tar"
         ]
       },
       "outputs": {

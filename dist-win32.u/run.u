@@ -125,6 +125,29 @@ Others: the S7z object
   \test(pass)
   \dk.object(abi: "Release.Linux_x86_64", value-id: "osyay2l2zuejtk7kn63sdsuwok47vasr25aa3y7opzblhwwgtzcmq")\;
 
+## CommonsBase_Std.Coreutils@0.8.0
+  $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-Coreutils-0.8.0.zip
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86", value-id: "?")\;
+  $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.8.0.zip
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "?")\;
+  $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Windows_arm64 -f ${RUNTIME}/Windows_arm64-Coreutils-0.8.0.zip
+  \test(pass)
+  \dk.object(abi: "Release.Windows_arm64", value-id: "?")\;
+  $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Darwin_arm64 -f ${RUNTIME}/Darwin_arm64-Coreutils-0.8.0.zip
+  \test(pass)
+  \dk.object(abi: "Release.Darwin_arm64", value-id: "?")\;
+  $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Darwin_x86_64 -f ${RUNTIME}/Darwin_x86_64-Coreutils-0.8.0.zip
+  \test(pass)
+  \dk.object(abi: "Release.Darwin_x86_64", value-id: "?")\;
+  $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Linux_x86 -f ${RUNTIME}/Linux_x86-Coreutils-0.8.0.zip
+  \test(pass)
+  \dk.object(abi: "Release.Linux_x86", value-id: "?")\;
+  $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Linux_x86_64 -f ${RUNTIME}/Linux_x86_64-Coreutils-0.8.0.zip
+  \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "?")\;
+
 ## CommonsBase_Std.S7z@25.1.0
   $ get-object CommonsBase_Std.S7z@25.1.0 -s Release.Windows_x86 -f ${RUNTIME}/Windows_x86-S7z-25.1.0.zip
   \test(pass)
