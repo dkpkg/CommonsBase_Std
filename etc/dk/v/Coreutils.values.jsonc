@@ -33,7 +33,11 @@
           // Windows coreutils.exe. The Windows assets are zip files are supported natively by dk.
           "get-asset CommonsBase_Std.Coreutils.Bundle@0.8.0 -p coreutils-0.8.0-aarch64-pc-windows-msvc.zip -m coreutils-0.8.0-aarch64-pc-windows-msvc/coreutils.exe -f ${SLOT.Release.Windows_arm64}/coreutils.exe",
           "get-asset CommonsBase_Std.Coreutils.Bundle@0.8.0 -p coreutils-0.8.0-i686-pc-windows-msvc.zip -m coreutils-0.8.0-i686-pc-windows-msvc/coreutils.exe -f ${SLOT.Release.Windows_x86}/coreutils.exe",
-          "get-asset CommonsBase_Std.Coreutils.Bundle@0.8.0 -p coreutils-0.8.0-x86_64-pc-windows-msvc.zip -m coreutils-0.8.0-x86_64-pc-windows-msvc/coreutils.exe -f ${SLOT.Release.Windows_x86_64}/coreutils.exe",
+          // NOTE: Unfortunately coreutils-0.8.0-x86_64-pc-windows-msvc.zip does not bundle coreutils.exe
+          //       but instead individual binaries (rm.exe, etc.).
+          //       So switch to coreutils-0.8.0-x86_64-pc-windows-gnu.zip which is statically linked.
+          // nope: "get-asset CommonsBase_Std.Coreutils.Bundle@0.8.0 -p coreutils-0.8.0-x86_64-pc-windows-msvc.zip -m coreutils-0.8.0-x86_64-pc-windows-msvc/coreutils.exe -f ${SLOT.Release.Windows_x86_64}/coreutils.exe",
+          "get-asset CommonsBase_Std.Coreutils.Bundle@0.8.0 -p coreutils-0.8.0-x86_64-pc-windows-gnu.zip -m coreutils-0.8.0-x86_64-pc-windows-gnu/coreutils.exe -f ${SLOT.Release.Windows_x86_64}/coreutils.exe",
 
           // Windows, macOS and Linux LICENSE file
           "get-asset CommonsBase_Std.Coreutils.Bundle@0.8.0 -p coreutils-0.8.0-i686-pc-windows-msvc.zip -m coreutils-0.8.0-i686-pc-windows-msvc/LICENSE -f ${SLOT.Release.Darwin_arm64}/LICENSE",
