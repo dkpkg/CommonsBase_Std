@@ -37,7 +37,10 @@
         "origins": [
           {
             "name": "toybox",
-            "mirrors": ["https://landley.net/toybox/downloads/binaries/0.8.9"]
+            "mirrors": [
+              "https://github.com/dkpkg/CommonsBase_Std/releases/download/toybox-mirror-0.8.9",
+              "https://landley.net/toybox/downloads/binaries/0.8.9"
+            ]
           }
         ]
       },
