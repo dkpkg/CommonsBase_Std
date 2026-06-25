@@ -2,7 +2,7 @@
 //  ./dk0 -I etc/dk/v --trust-local-package CommonsBase_Std get-bundle CommonsBase_Std.Apparatus.RustAbi@0.1.0 -d target/troubleshoot
 //  ./dk0 -I etc/dk/v --trust-local-package CommonsBase_Std get-object CommonsBase_Std.Coreutils.Tar@0.8.0 -s Release.Darwin_arm64 -d target/coreutils-tarmacarm64
 {
-  "$schema": "https://github.com/diskuv/dk/raw/refs/heads/V2_5/etc/jsonschema/dk-values.json",
+  "$schema": "https://diskuv.com/dk/schema/dk-value-1.0.json",
   "schema_version": { "major": 1, "minor": 0 },
   "forms": [
     {
