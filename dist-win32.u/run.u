@@ -56,6 +56,45 @@ CommonsBase_Std.Fd requires CommonsBase_Std.Extract0.
   \test(pass)
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ogwakcx2lgsdsq6xh4bctezlzphi5pc754dda2vmqwhyrydyopcva")\;
 
+## CommonsBase_Std.Extract.F_Untar@0.2.0
+
+This is a function rule that untars a tar, tar.gz, tar.xz or tar.bz2 file,
+extracting only the specified `paths[]`.
+
+### Configurations
+
+One of the following sets of options must be provided:
+- tarmodver= tarassetpath= modver= paths[]=
+
+### Options
+- tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0
+  The bundle containing the tar, tar.gz, tar.xz or tar.bz2 file.
+- tarassetpath=nano.tar
+  The asset path within the bundle of the tar, tar.gz, tar.xz or tar.bz2
+  file to extract.
+- modver=OurTest_Std.Extract@0.2.0
+  The MODULE@VERSION of the form object that will contain the extracted files.
+  The slot for the form object will be `Release.Agnostic`.
+- paths[]=somefile
+  The paths to extract from the tarball.
+  Only the specified paths are extracted (unlike @0.1.0 which extracts all files).
+
+### FAQ
+
+#### Q1: Platforms?
+On macOS the /usr/bin/tar system binary is used.
+On Linux the toybox tar command is fetched from an asset and used.
+On Windows the 7z.exe from S7z command is fetched from an asset and used.
+
+### Examples
+
+  $ post-object CommonsBase_Std.Extract.F_Untar@0.2.0 -f ${RUNTIME}/Extract.0_2_0.F_Untar.untar.zip
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_Untar@0.2.0
+  >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
+  >   'paths[]=somefile'
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q")\;
+
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
 
 -- (Function rule) Extracts a tar, tar.gz, tar.xz or tar.bz2 file and then re-compresses it
@@ -92,10 +131,46 @@ Others: the S7z object
   \test(pass)
   \dk.object(abi: "Release.Windows_x86_64", value-id: "og2iofw7342nvbsol6nip4uzk2ahksmhwe6hs5fsh2d257qvodxxa")\;
 
+## CommonsBase_Std.Extract.F_TarToZip@0.2.0
+
+-- (Function rule) Extracts a tar, tar.gz, tar.xz or tar.bz2 file and then re-compresses it
+-- to a .zip file which has first-class support in the dk build system.
+### Configurations
+One of the following sets of options must be provided:
+- tarmodver= tarassetpath= modver=
+
+### Options
+-  tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0
+   The bundle containing the tar, tar.gz, tar.xz or tar.bz2 file.
+-  tarassetpath=nano.tar
+   The asset path within the bundle of the tar, tar.gz, tar.xz or tar.bz2
+   file to extract.
+-  modver=OurTest_Std.Extract@0.2.0
+   The MODULE@VERSION of the form object that will contain the "output.zip" file.
+   The slot for the form object will be `Release.Agnostic`.
+
+### FAQ
+
+#### Q1: Platforms?
+On macOS the /usr/bin/tar system binary is used.
+On Linux the toybox tar command is fetched from an asset and used.
+On Windows the 7z.exe from S7z command is fetched from an asset and used.
+
+On macOS: /usr/bin/zip
+Others: the S7z object
+
+### Examples
+
+  $ post-object CommonsBase_Std.Extract.F_TarToZip@0.2.0 -f ${RUNTIME}/Extract.0_2_0.F_TarToZip.tartozip.zip
+  >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.2.0
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta")\;
+
 ## CommonsBase_Std.S7z.S7zr@25.1.0
   $ get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.S7zr-25.1.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "omrbpfrtafh6zxpg5bqedlllfv4lksqbuz7owdvb7zbpngf4rtqxq")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "o6mbbz5lppxk7lltlewdl3ukysykgeyrlpsdhjgcldhmrzvo4pueq")\;
 
 ## CommonsBase_Std.S7z.Windows7zExe@25.1.0
   $ get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.Windows7zExe-25.1.0.zip
@@ -131,7 +206,7 @@ Others: the S7z object
   \dk.object(abi: "Release.Windows_x86", value-id: "otqheq5u2b4k26xgd5zxdbzuzy72rn3qzwh5nv7a2vgsnks3pinuq")\;
   $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.8.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "oqiaoje7bprazhsiazgb6q4aseb2dsokknyel5nxk42js7ko5ymfa")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "o3tgbhislkddnqz4hyy2e3wnmpb7dfhmdgtwxlc2t7n42zjxxx5ya")\;
   $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Windows_arm64 -f ${RUNTIME}/Windows_arm64-Coreutils-0.8.0.zip
   \test(pass)
   \dk.object(abi: "Release.Windows_arm64", value-id: "ojg6enprk6nvhdaf7eu5mzptilipl6vvw7jsm2ulwd65uxb7yuc3a")\;
