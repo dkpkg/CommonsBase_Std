@@ -170,7 +170,7 @@ Others: the S7z object
 ## CommonsBase_Std.S7z.S7zr@25.1.0
   $ get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.S7zr-25.1.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "o6mbbz5lppxk7lltlewdl3ukysykgeyrlpsdhjgcldhmrzvo4pueq")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "omrbpfrtafh6zxpg5bqedlllfv4lksqbuz7owdvb7zbpngf4rtqxq")\;
 
 ## CommonsBase_Std.S7z.Windows7zExe@25.1.0
   $ get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.Windows7zExe-25.1.0.zip
@@ -206,7 +206,7 @@ Others: the S7z object
   \dk.object(abi: "Release.Windows_x86", value-id: "otqheq5u2b4k26xgd5zxdbzuzy72rn3qzwh5nv7a2vgsnks3pinuq")\;
   $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-Coreutils-0.8.0.zip
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "o3tgbhislkddnqz4hyy2e3wnmpb7dfhmdgtwxlc2t7n42zjxxx5ya")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "oqiaoje7bprazhsiazgb6q4aseb2dsokknyel5nxk42js7ko5ymfa")\;
   $ get-object CommonsBase_Std.Coreutils@0.8.0 -s Release.Windows_arm64 -f ${RUNTIME}/Windows_arm64-Coreutils-0.8.0.zip
   \test(pass)
   \dk.object(abi: "Release.Windows_arm64", value-id: "ojg6enprk6nvhdaf7eu5mzptilipl6vvw7jsm2ulwd65uxb7yuc3a")\;
