@@ -1,0 +1,37 @@
+{
+  "continuations": {
+    "attestation": {
+      "openbsd_signify": {
+        "signature": "untrusted comment: signed by key f012f39422d61ed2\nRWTwEvOUItYe0gzpAbJQl2uQHm6a/ru/M6czxUmSNJFozpqA1f6FUP0mjdnyZg7DwC5w3LqcEo1VtkW3KjuypmVTskl3hBr2jQk=\n"
+      }
+    },
+    "continuations_to_sign": {
+      "2.7": {
+        "application": { "name": "dk0", "version": "2.4.2+rev-233" },
+        "openbsd_signify": {
+          "public_key": "untrusted comment: CommonsBase_Std-2.7\nRWSesfERD4t0CfZXffufCrILIaAbo1MAkv71wC4pAb5zY5BnOkzq3yB5\n"
+        }
+      },
+      "2.8": {
+        "application": { "name": "dk0", "version": "2.4.2+rev-233" },
+        "openbsd_signify": {
+          "public_key": "untrusted comment: CommonsBase_Std-2.8\nRWTooNFcmKODlGshCH/ckDm33SWya+8Xfp/B4jc6mGNtN5v6N8gMtU0X\n"
+        }
+      },
+      "3.0": {
+        "openbsd_signify": {
+          "public_key": "untrusted comment: CommonsBase_Std-3.0\nRWTzxNnZQeugZoU4+2DgxxktaEJKGlEprALP67bac7HPQxAK4ee1WCxk\n"
+        }
+      }
+    }
+  },
+  "id": "CommonsBase_Std@2.6.0",
+  "license": { "spdx": "Apache-2.0" },
+  "producer": {
+    "application": { "name": "dk0", "version": "2.4.2+rev-233" },
+    "github_slsa_v1_l2": { "repository": "dkpkg/CommonsBase_Std" },
+    "openbsd_signify": {
+      "public_key": "untrusted comment: CommonsBase_Std-2.6\nRWTwEvOUItYe0u6ALvOER15EmRBMzwb9DEEJrCiJ25gMRzqHhpxtxa5a\n"
+    }
+  }
+}
