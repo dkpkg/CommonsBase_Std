@@ -146,11 +146,15 @@ end
 function CommonsBase_Std__Extract__0_2_0.strip_leading(path, nstrip)
   local p = path
   local n = nstrip or 0
-  while n > 0 do
-    local s, e = string.find(p, "^[^/]+/")
-    if not s then break end
-    p = string.sub(p, e + 1)
-    n = n - 1
+  local more = 1
+  while n > 0 and more == 1 do
+    local s, e = string.find(p, "^[^/][^/]*/")
+    if s then
+      p = string.sub(p, e + 1)
+      n = n - 1
+    else
+      more = 0
+    end
   end
   return p
 end
@@ -168,11 +172,11 @@ function CommonsBase_Std__Extract__0_2_0.untar(p)
   -- requested `paths` with `--strip-components=<nstrip>` into <slot>[/<destdir>].
   -- ---------------------------------------------------------------------------
   local unix = {
-    { false, "${SLOT.Release.Darwin_arm64}" },
-    { false, "${SLOT.Release.Darwin_x86_64}" },
-    { true, "${SLOT.Release.Linux_arm64}" },
-    { true, "${SLOT.Release.Linux_x86_64}" },
-    { true, "${SLOT.Release.Linux_x86}" },
+    { "systar", "${SLOT.Release.Darwin_arm64}" },
+    { "systar", "${SLOT.Release.Darwin_x86_64}" },
+    { "toybox", "${SLOT.Release.Linux_arm64}" },
+    { "toybox", "${SLOT.Release.Linux_x86_64}" },
+    { "toybox", "${SLOT.Release.Linux_x86}" },
   }
   local ui = 1
   while unix[ui] ~= nil do
@@ -183,7 +187,7 @@ function CommonsBase_Std__Extract__0_2_0.untar(p)
       table.insert(commands, { p.toyboxexe, "mkdir", "-p", dest })
     end
     local cmd
-    if unix[ui][1] then
+    if unix[ui][1] == "toybox" then
       cmd = { p.toyboxexe, "tar", "-x" .. p.tarcompressflag .. "f", p.tarfile, "-C", dest }
     else
       cmd = { "/usr/bin/tar", "-x" .. p.tarcompressflag .. "f", p.tarfile, "-C", dest }
