@@ -124,7 +124,7 @@ function CommonsBase_Std__Extract__0_2_0.common_params(request, p)
   --   nstrip=N   strip N leading path components (like tar --strip-components)
   --   destdir=D  extract into the "<slot>/D" subdirectory instead of the slot root
   -- Defaults (0 / nil) preserve the original @0.2.0 behavior.
-  p.nstrip = tonumber(request.user.nstrip) or 0
+  p.nstrip = tonumber(request.user.nstrip or "0") or 0
   p.destdir = request.user.destdir
 end
 
