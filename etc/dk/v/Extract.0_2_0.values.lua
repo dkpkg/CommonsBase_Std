@@ -119,6 +119,13 @@ function CommonsBase_Std__Extract__0_2_0.common_params(request, p)
   p.sevenzzexe = sevenzzexe
   p.sevenzexe_win32 = sevenzexe_win32
   p.coreutilsexe = coreutilsexe
+
+  -- Optional post-extraction shaping (used by `F_Untar`):
+  --   nstrip=N   strip N leading path components (like tar --strip-components)
+  --   destdir=D  extract into the "<slot>/D" subdirectory instead of the slot root
+  -- Defaults (0 / nil) preserve the original @0.2.0 behavior.
+  p.nstrip = tonumber(request.user.nstrip) or 0
+  p.destdir = request.user.destdir
 end
 
 -- Append each of `paths` (a Lua array) as trailing arguments to the command
@@ -133,96 +140,115 @@ function CommonsBase_Std__Extract__0_2_0.append_paths(cmd, paths)
   return cmd
 end
 
+-- Strip `nstrip` leading `component/` segments from `path`. Mirrors tar
+-- `--strip-components=<nstrip>` so the declared outputs match what is extracted.
+-- (lua-ml: module-level function, since local functions are unsupported.)
+function CommonsBase_Std__Extract__0_2_0.strip_leading(path, nstrip)
+  local p = path
+  local n = nstrip or 0
+  while n > 0 do
+    local s, e = string.find(p, "^[^/]+/")
+    if not s then break end
+    p = string.sub(p, e + 1)
+    n = n - 1
+  end
+  return p
+end
+
 function CommonsBase_Std__Extract__0_2_0.untar(p)
   local append_paths = CommonsBase_Std__Extract__0_2_0.append_paths
-  local commands = {
-    -- macOS system tar
-    -- only extract the requested `paths`
-    append_paths({
-      "/usr/bin/tar", "-x" .. p.tarcompressflag .. "f",
-      p.tarfile,
-      "-C", "${SLOT.Release.Darwin_arm64}" }, p.paths),
-    append_paths({
-      "/usr/bin/tar", "-x" .. p.tarcompressflag .. "f",
-      p.tarfile,
-      "-C", "${SLOT.Release.Darwin_x86_64}" }, p.paths),
-    -- toybox for Linux
-    -- only extract the requested `paths`
-    append_paths({
-      p.toyboxexe, "tar", "-x" .. p.tarcompressflag .. "f",
-      p.tarfile,
-      "-C", "${SLOT.Release.Linux_arm64}" }, p.paths),
-    append_paths({
-      p.toyboxexe, "tar", "-x" .. p.tarcompressflag .. "f",
-      p.tarfile,
-      "-C", "${SLOT.Release.Linux_x86_64}" }, p.paths),
-    append_paths({
-      p.toyboxexe, "tar", "-x" .. p.tarcompressflag .. "f",
-      p.tarfile,
-      "-C", "${SLOT.Release.Linux_x86}" }, p.paths),
+  local nstrip = p.nstrip or 0
+  local has_dest = (p.destdir ~= nil and p.destdir ~= "")
+
+  local commands = {}
+
+  -- ---------------------------------------------------------------------------
+  -- Unix: macOS system tar (/usr/bin/tar) + Linux toybox tar.
+  -- For each slot: optionally `mkdir -p <slot>/<destdir>`, then extract the
+  -- requested `paths` with `--strip-components=<nstrip>` into <slot>[/<destdir>].
+  -- ---------------------------------------------------------------------------
+  local unix = {
+    { false, "${SLOT.Release.Darwin_arm64}" },
+    { false, "${SLOT.Release.Darwin_x86_64}" },
+    { true, "${SLOT.Release.Linux_arm64}" },
+    { true, "${SLOT.Release.Linux_x86_64}" },
+    { true, "${SLOT.Release.Linux_x86}" },
   }
+  local ui = 1
+  while unix[ui] ~= nil do
+    local slot = unix[ui][2]
+    local dest = slot
+    if has_dest then dest = slot .. "/" .. p.destdir end
+    if has_dest then
+      table.insert(commands, { p.toyboxexe, "mkdir", "-p", dest })
+    end
+    local cmd
+    if unix[ui][1] then
+      cmd = { p.toyboxexe, "tar", "-x" .. p.tarcompressflag .. "f", p.tarfile, "-C", dest }
+    else
+      cmd = { "/usr/bin/tar", "-x" .. p.tarcompressflag .. "f", p.tarfile, "-C", dest }
+    end
+    if nstrip > 0 then table.insert(cmd, "--strip-components=" .. tostring(nstrip)) end
+    table.insert(commands, append_paths(cmd, p.paths))
+    ui = ui + 1
+  end
+
+  -- ---------------------------------------------------------------------------
+  -- Windows: 7z. `.tar.gz/.xz/.bz2` are first decompressed to a `.tar` in the
+  -- current directory, then the requested `paths` are extracted. When shaping
+  -- (nstrip>0 or destdir) is requested we use `7z e` (flatten to basename) into
+  -- <slot>/<destdir>; that is correct when nstrip strips to the leaf filename
+  -- (the shape the current callers use). Otherwise the original `7z x` behavior
+  -- (keep member paths, extract to the slot root) is preserved.
+  -- ---------------------------------------------------------------------------
+  local shaping = has_dest or nstrip > 0
+  local win = { "Windows_x86", "Windows_x86_64", "Windows_arm64" }
   if p.gzip or p.xz or p.bz2 then
-        -- extract the .tar.gz/.tar.xz/.tar.bz2 to a .tar
-          -- with [env -u] so runs on Windows slots only
-          -- with [7z.exe] ...
-          -- uncompress
-          -- to current directory
-          -- the .tar.gz
-          -- select the .tar extracted output
-          -- (extract the whole intermediate .tar; the `paths` filter is applied
-          --  in the second step that unpacks the .tar into the output slot)
     table.insert(commands, {
         p.coreutilsexe, "env", "-u", "${SLOT.Release.Windows_x86}", "--",
-        p.sevenzexe_win32, "x",
-        "-o.", p.tarfile, p.file_tar_basename
-      })
+        p.sevenzexe_win32, "x", "-o.", p.tarfile, p.file_tar_basename })
     table.insert(commands, {
         p.coreutilsexe, "env", "-u", "first", "-u", "${SLOT.Release.Windows_x86_64}", "--",
-        p.sevenzexe_win32, "x",
-        "-o.", p.tarfile, p.file_tar_basename
-      })
+        p.sevenzexe_win32, "x", "-o.", p.tarfile, p.file_tar_basename })
     table.insert(commands, {
         p.coreutilsexe, "env", "-u", "${SLOT.Release.Windows_arm64}", "--",
-        p.sevenzexe_win32, "x",
-        "-o.", p.tarfile, p.file_tar_basename
-      })
-        -- extract the .tar
-          -- with [7z.exe] ...
-          -- uncompress
-          -- to output directory
-          -- the tarball
-          -- only extract the requested `paths`
-    table.insert(commands, append_paths({
-        p.sevenzexe_win32, "x",
-        "-o${SLOT.Release.Windows_x86}",
-        p.file_tar_basename
-      }, p.paths))
-    table.insert(commands, append_paths({
-        p.sevenzexe_win32, "x",
-        "-o${SLOT.Release.Windows_x86_64}",
-        p.file_tar_basename
-      }, p.paths))
-    table.insert(commands, append_paths({
-        p.sevenzexe_win32, "x",
-        "-o${SLOT.Release.Windows_arm64}",
-        p.file_tar_basename
-      }, p.paths))
+        p.sevenzexe_win32, "x", "-o.", p.tarfile, p.file_tar_basename })
+    local wi = 1
+    while win[wi] ~= nil do
+      local slot = "${SLOT.Release." .. win[wi] .. "}"
+      local dest = slot
+      if has_dest then dest = slot .. "/" .. p.destdir end
+      if shaping then
+        table.insert(commands, append_paths({ p.sevenzexe_win32, "e", "-o" .. dest, p.file_tar_basename }, p.paths))
+      else
+        table.insert(commands, append_paths({ p.sevenzexe_win32, "x", "-o" .. slot, p.file_tar_basename }, p.paths))
+      end
+      wi = wi + 1
+    end
   else
-        -- with [7z.exe] ...
-        -- uncompress
-        -- to output directory
-        -- the tarball
-        -- only extract the requested `paths`
-    table.insert(commands, append_paths({
-        p.sevenzexe_win32, "x", "-o${SLOT.Release.Windows_x86}",
-        p.tarfile}, p.paths))
-    table.insert(commands, append_paths({
-        p.sevenzexe_win32, "x", "-o${SLOT.Release.Windows_x86_64}",
-        p.tarfile}, p.paths))
-    table.insert(commands, append_paths({
-        p.sevenzexe_win32, "x", "-o${SLOT.Release.Windows_arm64}",
-        p.tarfile}, p.paths))
+    local wi = 1
+    while win[wi] ~= nil do
+      local slot = "${SLOT.Release." .. win[wi] .. "}"
+      local dest = slot
+      if has_dest then dest = slot .. "/" .. p.destdir end
+      if shaping then
+        table.insert(commands, append_paths({ p.sevenzexe_win32, "e", "-o" .. dest, p.tarfile }, p.paths))
+      else
+        table.insert(commands, append_paths({ p.sevenzexe_win32, "x", "-o" .. slot, p.tarfile }, p.paths))
+      end
+      wi = wi + 1
+    end
   end
+
+  -- Declared outputs must match what is extracted: apply the same strip + destdir.
+  local outpaths = {}
+  local oi = 1
+  while p.paths[oi] ~= nil do
+    local sp = CommonsBase_Std__Extract__0_2_0.strip_leading(p.paths[oi], nstrip)
+    if has_dest then outpaths[oi] = p.destdir .. "/" .. sp else outpaths[oi] = sp end
+    oi = oi + 1
+  end
+
   return {
     submit = {
       values = {
@@ -241,7 +267,7 @@ function CommonsBase_Std__Extract__0_2_0.untar(p)
                     "Release.Darwin_x86_64", "Release.Darwin_arm64",
                     "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
                   },
-                  paths = p.paths
+                  paths = outpaths
                 }
               }
             }
