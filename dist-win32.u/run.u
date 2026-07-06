@@ -54,7 +54,7 @@ CommonsBase_Std.Fd requires CommonsBase_Std.Extract0.
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   'paths[]=somefile'
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "ogwakcx2lgsdsq6xh4bctezlzphi5pc754dda2vmqwhyrydyopcva", byteSize: "242")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ogwakcx2lgsdsq6xh4bctezlzphi5pc754dda2vmqwhyrydyopcva")\;
 
 ## CommonsBase_Std.Extract.F_Untar@0.2.0
 
@@ -93,7 +93,7 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   'paths[]=somefile'
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q", byteSize: "242")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
 
@@ -129,7 +129,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.1.0
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "og2iofw7342nvbsol6nip4uzk2ahksmhwe6hs5fsh2d257qvodxxa", byteSize: "343")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "og2iofw7342nvbsol6nip4uzk2ahksmhwe6hs5fsh2d257qvodxxa")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.2.0
 
@@ -165,7 +165,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.2.0
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta", byteSize: "343")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta")\;
 
 ## CommonsBase_Std.S7z.S7zr@25.1.0
   $ get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.S7zr-25.1.0.zip
