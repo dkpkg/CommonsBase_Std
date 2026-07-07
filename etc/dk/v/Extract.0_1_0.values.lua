@@ -301,14 +301,14 @@ function CommonsBase_Std__Extract__0_1_0.tartozip(p)
       "-x" .. p.tarcompressflag .. "f",
       p.tarfile
     },
-      -- [p.sevenzzee] is 7zz
+      -- [p.sevenzzee] is 7zz. Trailing "*" is the source (extracted cwd contents).
     {
       p.sevenzzexe, "a",
-      "${SLOT.Release.Darwin_x86_64}/output.zip"
+      "${SLOT.Release.Darwin_x86_64}/output.zip", "*"
     },
     {
       p.sevenzzexe, "a",
-      "${SLOT.Release.Darwin_arm64}/output.zip"
+      "${SLOT.Release.Darwin_arm64}/output.zip", "*"
     },
 
     -- Linux
@@ -328,18 +328,18 @@ function CommonsBase_Std__Extract__0_1_0.tartozip(p)
       p.toyboxexe,
       "tar", "-x" .. p.tarcompressflag .. "f", p.tarfile
     },
-      -- [p.sevenzzee] is 7zz
+      -- [p.sevenzzee] is 7zz. Trailing "*" is the source (extracted cwd contents).
     {
       p.sevenzzexe, "a",
-      "${SLOT.Release.Linux_x86_64}/output.zip"
+      "${SLOT.Release.Linux_x86_64}/output.zip", "*"
     },
     {
       p.sevenzzexe, "a",
-      "${SLOT.Release.Linux_x86}/output.zip"
+      "${SLOT.Release.Linux_x86}/output.zip", "*"
     },
     {
       p.sevenzzexe, "a",
-      "${SLOT.Release.Linux_arm64}/output.zip"
+      "${SLOT.Release.Linux_arm64}/output.zip", "*"
     },
   }
 
@@ -367,15 +367,17 @@ function CommonsBase_Std__Extract__0_1_0.tartozip(p)
         p.sevenzexe_win32, "x", "-o.", p.tarfile
       })
   end
-  -- (windows) create output.zip from the .tar
+  -- (windows) create output.zip from the extracted tar contents in the cwd.
+  -- The trailing "*" is the source: without it `7z a` has no files to add and
+  -- produces an empty (non-zipfile) object.
   table.insert(commands, {
-    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_x86}/output.zip"
+    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_x86}/output.zip", "*"
   })
   table.insert(commands, {
-    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_x86_64}/output.zip"
+    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_x86_64}/output.zip", "*"
   })
   table.insert(commands, {
-    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_arm64}/output.zip"
+    p.sevenzexe_win32, "a", "${SLOT.Release.Windows_arm64}/output.zip", "*"
   })
 
   return {
