@@ -40,9 +40,7 @@ jobs:
             pubkey: ${{ secrets.distribute_2_6_pubkey }}
             seckey: ${{ secrets.distribute_2_6_seckey }}
             options: -nosysinc
-            # store: none for this release so CI rebuilds F_TarToZip fresh instead of
-            # restoring the prior release's stale object. Restore to `release` afterward.
-            store: none
+            store: release
             distscript: ${{ matrix.distscript }}
             execution-abi: ${{ matrix.execution-abi }}
             experimental-dk-owner: ${{ github.repository_owner == 'dkpkg' && 'diskuv' || github.repository_owner }}
