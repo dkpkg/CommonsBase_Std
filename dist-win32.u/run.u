@@ -131,6 +131,17 @@ Others: the S7z object
   \test(pass)
   \dk.object(abi: "Release.Windows_x86_64", value-id: "oebuetlubxcwtghloymdkcloxvcpwzwp766hs3zupgeysmkcbz46q")\;
 
+## CommonsBase_Std.Extract.F_TarToZip@0.1.1
+
+-- (Function rule) Same as @0.1.0 but distributed under a new version so consumers can
+-- reference the source-files fix (`7z a output.zip *`) unambiguously.
+
+  $ post-object CommonsBase_Std.Extract.F_TarToZip@0.1.1 -f ${RUNTIME}/Extract.0_1_1.F_TarToZip.tartozip.zip
+  >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.1.1
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "onkbnqbrkm47axaavuopr6kcvwyrcfgrrqxozrs2oae36j7jqkh5a")\;
+
 ## CommonsBase_Std.Extract.F_TarToZip@0.2.0
 
 -- (Function rule) Extracts a tar, tar.gz, tar.xz or tar.bz2 file and then re-compresses it
