@@ -11,6 +11,20 @@ We'll make a nano-sized tarball for testing the tarball extraction rules.
   '2048'
   'sha256:791b8d0be20f8dfa6b7c08f6d16909c693a5f3aadbb0db4d846b32193184bbd9'
 
+nano.tbz is nano.tar compressed with Python 3.14 `bz2` (bzip2), exercising
+... the short `.tbz` tarball suffix added in Extract@0.2.1.
+  % unified.asset { name="NanoTbz", file="nano.tbz" }
+  'asset'
+  '140'
+  'sha256:16a9a8808c71311df9eb5c5fc092561b3701d469310a7b1b48d5f2c5301d54e3'
+
+nano.tar.zst is nano.tar compressed with Python 3.14 `compression.zstd`
+... (Zstandard), exercising the `.tar.zst` support added in Extract@0.3.0.
+  % unified.asset { name="NanoZst", file="nano.tar.zst" }
+  'asset'
+  '116'
+  'sha256:56966bc7b38d3fa21de2db5c227c225db7499420bff4498937d2ff6c39910b6f'
+
 ## CommonsBase_Std.Extract.F_Untar@0.1.0
 
 This is a function rule that untars a tar, tar.gz, tar.xz or tar.bz2 file.
@@ -95,6 +109,31 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   \test(pass)
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q")\;
 
+## CommonsBase_Std.Extract.F_Untar@0.2.1
+
+-- (Function rule) Same as @0.2.0 plus the short tarball suffixes `.tgz`,
+-- `.txz` and `.tbz` that GitHub release tarballs commonly use.
+
+  $ post-object CommonsBase_Std.Extract.F_Untar@0.2.1 -f ${RUNTIME}/Extract.0_2_1.F_Untar.untar.zip
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_Untar@0.2.1
+  >   tarmodver=CommonsBase_Std.Apparatus.NanoTbz@0.1.0 tarassetpath=nano.tbz
+  >   'paths[]=somefile'
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q")\;
+
+## CommonsBase_Std.Extract.F_Untar@0.3.0
+
+-- (Function rule) Same as @0.2.1 plus Zstandard `.tar.zst` tarballs (e.g.
+-- msys2 `.pkg.tar.zst` packages). zst archives are decompressed with 7-Zip
+-- (S7z 25.01) on every platform, then the plain tar is extracted.
+
+  $ post-object CommonsBase_Std.Extract.F_Untar@0.3.0 -f ${RUNTIME}/Extract.0_3_0.F_Untar.untar.zip
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_Untar@0.3.0
+  >   tarmodver=CommonsBase_Std.Apparatus.NanoZst@0.1.0 tarassetpath=nano.tar.zst
+  >   'paths[]=somefile'
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q")\;
+
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
 
 -- (Function rule) Extracts a tar, tar.gz, tar.xz or tar.bz2 file and then re-compresses it
@@ -175,6 +214,29 @@ Others: the S7z object
   $ post-object CommonsBase_Std.Extract.F_TarToZip@0.2.0 -f ${RUNTIME}/Extract.0_2_0.F_TarToZip.tartozip.zip
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.2.0
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta")\;
+
+## CommonsBase_Std.Extract.F_TarToZip@0.2.1
+
+-- (Function rule) Same as @0.2.0 plus the short tarball suffixes `.tgz`,
+-- `.txz` and `.tbz` that GitHub release tarballs commonly use.
+
+  $ post-object CommonsBase_Std.Extract.F_TarToZip@0.2.1 -f ${RUNTIME}/Extract.0_2_1.F_TarToZip.tartozip.zip
+  >   tarmodver=CommonsBase_Std.Apparatus.NanoTbz@0.1.0 tarassetpath=nano.tbz
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.2.1
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta")\;
+
+## CommonsBase_Std.Extract.F_TarToZip@0.3.0
+
+-- (Function rule) Same as @0.2.1 plus Zstandard `.tar.zst` tarballs (e.g.
+-- msys2 `.pkg.tar.zst` packages). zst archives are decompressed with 7-Zip
+-- (S7z 25.01) on every platform, then the plain tar is extracted.
+
+  $ post-object CommonsBase_Std.Extract.F_TarToZip@0.3.0 -f ${RUNTIME}/Extract.0_3_0.F_TarToZip.tartozip.zip
+  >   tarmodver=CommonsBase_Std.Apparatus.NanoZst@0.1.0 tarassetpath=nano.tar.zst
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.3.0
   \test(pass)
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta")\;
 

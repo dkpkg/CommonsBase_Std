@@ -1,1 +1,4 @@
 dk0 text eol=lf
+dist-win32.u/nano.tar binary
+dist-win32.u/nano.tbz binary
+dist-win32.u/nano.tar.zst binary
