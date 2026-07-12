@@ -119,7 +119,7 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   >   tarmodver=CommonsBase_Std.Apparatus.NanoTbz@0.1.0 tarassetpath=nano.tbz
   >   'paths[]=somefile'
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "oguwyhh6mr4nq3x7j5nweu7remp4z5thqmbwfiay5mm2i4crtsjaa")\;
 
 ## CommonsBase_Std.Extract.F_Untar@0.3.0
 
@@ -132,7 +132,7 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   >   tarmodver=CommonsBase_Std.Apparatus.NanoZst@0.1.0 tarassetpath=nano.tar.zst
   >   'paths[]=somefile'
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "obk7ys2uvsincpnssai56y2mwrqtym65sxbuuyazdlyhzzk3ultca")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
 
@@ -226,7 +226,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.NanoTbz@0.1.0 tarassetpath=nano.tbz
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.2.1
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "o5yhnhye47kerbb2zpky4qocfmjesmn52as2jpwshliojmokobmxq")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.3.0
 
@@ -238,7 +238,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.NanoZst@0.1.0 tarassetpath=nano.tar.zst
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.3.0
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ovqfrus6tvaoviea3cb7tqninlu77dytu4pksaqbe6etzybnq4vma")\;
 
 ## CommonsBase_Std.S7z.S7zr@25.1.0
   $ get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.S7zr-25.1.0.zip
