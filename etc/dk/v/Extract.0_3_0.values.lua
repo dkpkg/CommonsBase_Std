@@ -184,6 +184,40 @@ function CommonsBase_Std__Extract__0_3_0.strip_leading(path, nstrip)
   return p
 end
 
+-- Directory portion of a forward-slash path ("a/b/c" -> "a/b", "x" -> "").
+function CommonsBase_Std__Extract__0_3_0.dirname(path)
+  local last = 0
+  local i = 1
+  local n = string.len(path)
+  while i <= n do
+    if string.sub(path, i, i) == "/" then last = i end
+    i = i + 1
+  end
+  if last == 0 then return "" end
+  return string.sub(path, 1, last - 1)
+end
+
+-- Windows shaping (nstrip and/or destdir) without flattening: 7z has no
+-- --strip-components, and `7z e` collapses every member to its basename, which
+-- mismatches the declared strip_leading outputs whenever a stripped path keeps
+-- sub-directories. Instead extract preserving member paths into <slot>, then
+-- move each member to its stripped (+ destdir) output path under <slot>.
+function CommonsBase_Std__Extract__0_3_0.shape_extract(commands, p, slot, archive, nstrip, has_dest)
+  local H = CommonsBase_Std__Extract__0_3_0
+  table.insert(commands, H.append_paths({ p.sevenzexe_win32, "x", "-o" .. slot, archive }, p.paths))
+  local pi = 1
+  while p.paths[pi] ~= nil do
+    local outrel = H.strip_leading(p.paths[pi], nstrip)
+    if has_dest then outrel = p.destdir .. "/" .. outrel end
+    local reldir = H.dirname(outrel)
+    if reldir ~= "" then
+      table.insert(commands, { p.coreutilsexe, "mkdir", "-p", slot .. "/" .. reldir })
+    end
+    table.insert(commands, { p.coreutilsexe, "mv", slot .. "/" .. p.paths[pi], slot .. "/" .. outrel })
+    pi = pi + 1
+  end
+end
+
 function CommonsBase_Std__Extract__0_3_0.untar(p)
   local append_paths = CommonsBase_Std__Extract__0_3_0.append_paths
   local nstrip = p.nstrip or 0
@@ -235,10 +269,10 @@ function CommonsBase_Std__Extract__0_3_0.untar(p)
   -- ---------------------------------------------------------------------------
   -- Windows: 7z. `.tar.gz/.xz/.bz2` are first decompressed to a `.tar` in the
   -- current directory, then the requested `paths` are extracted. When shaping
-  -- (nstrip>0 or destdir) is requested we use `7z e` (flatten to basename) into
-  -- <slot>/<destdir>; that is correct when nstrip strips to the leaf filename
-  -- (the shape the current callers use). Otherwise the original `7z x` behavior
-  -- (keep member paths, extract to the slot root) is preserved.
+  -- (nstrip>0 or destdir) is requested, shape_extract preserves member paths and
+  -- moves each to its stripped (+ destdir) output, so sub-directories survive
+  -- (unlike `7z e`, which flattens to the basename). Otherwise `7z x` keeps
+  -- member paths and extracts to the slot root.
   -- ---------------------------------------------------------------------------
   local shaping = has_dest or nstrip > 0
   local win = { "Windows_x86", "Windows_x86_64", "Windows_arm64" }
@@ -255,10 +289,8 @@ function CommonsBase_Std__Extract__0_3_0.untar(p)
     local wi = 1
     while win[wi] ~= nil do
       local slot = "${SLOT.Release." .. win[wi] .. "}"
-      local dest = slot
-      if has_dest then dest = slot .. "/" .. p.destdir end
       if shaping then
-        table.insert(commands, append_paths({ p.sevenzexe_win32, "e", "-o" .. dest, p.file_tar_basename }, p.paths))
+        CommonsBase_Std__Extract__0_3_0.shape_extract(commands, p, slot, p.file_tar_basename, nstrip, has_dest)
       else
         table.insert(commands, append_paths({ p.sevenzexe_win32, "x", "-o" .. slot, p.file_tar_basename }, p.paths))
       end
@@ -268,10 +300,8 @@ function CommonsBase_Std__Extract__0_3_0.untar(p)
     local wi = 1
     while win[wi] ~= nil do
       local slot = "${SLOT.Release." .. win[wi] .. "}"
-      local dest = slot
-      if has_dest then dest = slot .. "/" .. p.destdir end
       if shaping then
-        table.insert(commands, append_paths({ p.sevenzexe_win32, "e", "-o" .. dest, p.tarfile }, p.paths))
+        CommonsBase_Std__Extract__0_3_0.shape_extract(commands, p, slot, p.tarfile, nstrip, has_dest)
       else
         table.insert(commands, append_paths({ p.sevenzexe_win32, "x", "-o" .. slot, p.tarfile }, p.paths))
       end
