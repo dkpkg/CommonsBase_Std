@@ -24,7 +24,14 @@ function rules.F_Untar(command, request)
                     "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
           },
           execution_slot = "Release.execution_abi"
-        },
+        }
+      }
+    }
+  elseif command == "declareinput" then
+    local tarmodver = assert(request.user.tarmodver, "please provide `tarmodver=MODULE@VERSION`")
+    local tarassetpath = assert(request.user.tarassetpath, "please provide `tarassetpath=ASSETPATH`")
+    return {
+      declareinput = {
         input_assets = {
           { id = tarmodver, path = tarassetpath }
         }
@@ -56,7 +63,14 @@ function rules.F_TarToZip(command, request)
             "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
           },
           execution_slot = "Release.execution_abi"
-        },
+        }
+      }
+    }
+  elseif command == "declareinput" then
+    local tarmodver = assert(request.user.tarmodver, "please provide `tarmodver=MODULE@VERSION`")
+    local tarassetpath = assert(request.user.tarassetpath, "please provide `tarassetpath=ASSETPATH`")
+    return {
+      declareinput = {
         input_assets = {
           { id = tarmodver, path = tarassetpath }
         }
