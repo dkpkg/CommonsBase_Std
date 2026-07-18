@@ -68,6 +68,7 @@ CommonsBase_Std.Fd requires CommonsBase_Std.Extract0.
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   'paths[]=somefile'
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "o72cwmmsmmgvhhxdjsjphedw6sh53o2uqv5uz3bav2qy5tgt7mykq")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ogwakcx2lgsdsq6xh4bctezlzphi5pc754dda2vmqwhyrydyopcva")\;
 
 ## CommonsBase_Std.Extract.F_Untar@0.2.0
@@ -107,6 +108,7 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   'paths[]=somefile'
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "oqvs7nmqg66zcidsbbp4e6hvzc6w7gtwvklrcb2c7k2ymp7r2zr7q")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ow6dl7i4ulnnbqhzappornsoxaackj5nxspkc2u5a25yrz4mb655q")\;
 
 ## CommonsBase_Std.Extract.F_Untar@0.2.1
@@ -119,6 +121,7 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   >   tarmodver=CommonsBase_Std.Apparatus.NanoTbz@0.1.0 tarassetpath=nano.tbz
   >   'paths[]=somefile'
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "orgvt2l35yoczh4t3r5bj5j257ijn4efbuaa422njpfawyyiv76cq")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "oguwyhh6mr4nq3x7j5nweu7remp4z5thqmbwfiay5mm2i4crtsjaa")\;
 
 ## CommonsBase_Std.Extract.F_Untar@0.3.0
@@ -132,6 +135,7 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   >   tarmodver=CommonsBase_Std.Apparatus.NanoZst@0.1.0 tarassetpath=nano.tar.zst
   >   'paths[]=somefile'
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "otfyek5etwxq26fx467yapskfpyqw2xdn7p2imykjei3c3mrt2ila")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "obk7ys2uvsincpnssai56y2mwrqtym65sxbuuyazdlyhzzk3ultca")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
@@ -168,6 +172,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.1.0
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "okpdv2bexrlqsunyfzt2iy44uu4vr26zzgaubywo6cs7czgqflrqq")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "oebuetlubxcwtghloymdkcloxvcpwzwp766hs3zupgeysmkcbz46q")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.1
@@ -179,6 +184,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.1.1
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "otpj4lzukfnvwsm6dznygpwkb2k726n6mrg3nexf7pomycd3atz5a")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "onkbnqbrkm47axaavuopr6kcvwyrcfgrrqxozrs2oae36j7jqkh5a")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.2.0
@@ -215,6 +221,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.2.0
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "ofuixuzyijhzyipt2qybxwhvxj3fjl7bvkwgrn6iu55qlgqdlit5a")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ov4qyssaeosawwgodewco7vwdpp7uobuk3bywebxmqdhqbwt5t4ta")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.2.1
@@ -226,6 +233,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.NanoTbz@0.1.0 tarassetpath=nano.tbz
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.2.1
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "ofeogrmdogbhqjxnesnkhqiwcdqrnaak6pb6ffnmdsv7fxl2mmxiq")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "o5yhnhye47kerbb2zpky4qocfmjesmn52as2jpwshliojmokobmxq")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.3.0
@@ -238,6 +246,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.NanoZst@0.1.0 tarassetpath=nano.tar.zst
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.3.0
   \test(pass)
+  \dk.object(abi: "Release.Linux_x86_64", value-id: "otmrvdnkpmmwv4tnii4jjsva3xv7ywrqoo2ls36mz2cm3qkbaw74q")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ovqfrus6tvaoviea3cb7tqninlu77dytu4pksaqbe6etzybnq4vma")\;
 
 ## CommonsBase_Std.S7z.S7zr@25.1.0
