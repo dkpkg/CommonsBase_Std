@@ -2,7 +2,7 @@
 
 ## Overview
 
-Precompiled, relocatable cross-platform userland utilities — coreutils, fd, 7-Zip, msiextract, and toybox — packaged as dk assets for macOS, Linux, and Windows.
+Precompiled, relocatable cross-platform userland utilities (coreutils, fd, 7-Zip, msiextract, and toybox) packaged as dk assets for macOS, Linux, and Windows.
 
 `CommonsBase_Std` assembles upstream command-line tools into per-slot dk
 objects so downstream packages get a consistent `coreutils`, `fd`, `7zz`,
