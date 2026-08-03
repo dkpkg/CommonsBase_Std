@@ -45,13 +45,18 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
           "get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -m ./7z.dll -f ${SLOT.Release.Windows_x86}/7z.dll",
           "get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86_64 -m ./7z.dll -f ${SLOT.Release.Windows_x86_64}/7z.dll",
 
-          // Unix. 7zz -> 7zz.exe
+          // macOS. 7zz -> 7zz.exe
           "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Darwin_arm64 -m ./7zz -f ${SLOT.Release.Darwin_arm64}/7zz.exe",
           "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Darwin_x86_64 -m ./7zz -f ${SLOT.Release.Darwin_x86_64}/7zz.exe",
-          "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Linux_arm -m ./7zz -f ${SLOT.Release.Linux_arm}/7zz.exe",
-          "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Linux_arm64 -m ./7zz -f ${SLOT.Release.Linux_arm64}/7zz.exe",
-          "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Linux_x86 -m ./7zz -f ${SLOT.Release.Linux_x86}/7zz.exe",
-          "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Linux_x86_64 -m ./7zz -f ${SLOT.Release.Linux_x86_64}/7zz.exe",
+          // Linux. 7zzs -> 7zz.exe: the statically linked build, because a
+          // bare Release.Linux_* execution tool must run on any libc
+          // (glibc distros and musl hosts such as alpine alike); the
+          // dynamically linked 7zz needs /lib64/ld-linux-*.so and fails
+          // with "command not found" on musl.
+          "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Linux_arm -m ./7zzs -f ${SLOT.Release.Linux_arm}/7zz.exe",
+          "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Linux_arm64 -m ./7zzs -f ${SLOT.Release.Linux_arm64}/7zz.exe",
+          "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Linux_x86 -m ./7zzs -f ${SLOT.Release.Linux_x86}/7zz.exe",
+          "get-object CommonsBase_Std.S7z.MacLinux7zExe@25.1.0 -s Release.Linux_x86_64 -m ./7zzs -f ${SLOT.Release.Linux_x86_64}/7zz.exe",
 
           // Windows and Unix. License.txt -> LICENSE
           "get-object CommonsBase_Std.S7z.Windows7zExe@25.1.0 -s Release.Windows_x86 -m ./License.txt -f ${SLOT.Release.Windows_arm}/LICENSE",

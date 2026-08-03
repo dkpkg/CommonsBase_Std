@@ -56,8 +56,12 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
           "-o${SLOT.request}",
           // from the objects installed in tarballs/ [7z-Release.Darwin_arm64.tar] (etc.)
           "tarballs/7z-${SLOTNAME.request}.tar",
-          // extract only the '7zz' executable and 'License.txt' file
-          "7zz",
+          // extract the 7zz executables and the 'License.txt' file. The
+          // wildcard matches '7zz' everywhere plus '7zzs' (the statically
+          // linked build) in the Linux tars; the Mac tar has no '7zzs' and
+          // 7z exits 0 on a member pattern with no match, so one command
+          // serves every slot.
+          "7zz*",
           "License.txt"
         ]
       },
@@ -71,20 +75,23 @@ All assets are stored in [CommonsBase_Std.S7z.Bundle], which is defined in [Comm
             "paths": ["7zz", "License.txt"],
             "slots": ["Release.Darwin_x86_64"]
           },
+          // Linux tars also carry '7zzs', the statically linked build that
+          // the portable bare-slot convention needs (a bare Release.Linux_*
+          // execution tool must run on any libc, including musl hosts).
           {
-            "paths": ["7zz", "License.txt"],
+            "paths": ["7zz", "7zzs", "License.txt"],
             "slots": ["Release.Linux_arm"]
           },
           {
-            "paths": ["7zz", "License.txt"],
+            "paths": ["7zz", "7zzs", "License.txt"],
             "slots": ["Release.Linux_arm64"]
           },
           {
-            "paths": ["7zz", "License.txt"],
+            "paths": ["7zz", "7zzs", "License.txt"],
             "slots": ["Release.Linux_x86"]
           },
           {
-            "paths": ["7zz", "License.txt"],
+            "paths": ["7zz", "7zzs", "License.txt"],
             "slots": ["Release.Linux_x86_64"]
           }
         ]

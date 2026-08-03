@@ -46,10 +46,17 @@ So we use [7zr<version>.exe] is used to extract the correct architecture-specifi
 Linux
 -----
 
-The 7z binaries are dynamically linked; they are not be usable on all Linux distributions.
-For example, [7zz] in [7z2501-linux-arm.tar.xz] is:
+The [7zz] binaries are dynamically linked; they are not usable on all Linux
+distributions. For example, [7zz] in [7z2501-linux-arm.tar.xz] is:
 
   7zz: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 3.2.0, stripped
+
+However every Linux tar also carries [7zzs], the statically linked build:
+
+  7zzs: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, for GNU/Linux 3.2.0, stripped
+
+The bare Release.Linux_* slots ship [7zzs] (renamed 7zz.exe) so the execution
+tool runs on any libc, including musl hosts such as alpine.
 
 -----
 macOS
