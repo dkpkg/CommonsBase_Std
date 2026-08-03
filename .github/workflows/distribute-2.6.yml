@@ -35,6 +35,11 @@ jobs:
 
       - name: Distribute Modules
         uses: diskuv/dk-distribute@v3
+        env:
+            # PERMANENT explicit driver pin (the CommonsBase_Dk doctrine):
+            # without it the launcher floats on whatever manifest the site
+            # serves. Bump deliberately when adopting a new driver release.
+            DK0_BASE_URL: https://gitlab.com/api/v4/projects/60486861/packages/generic/dk-dist/2.4.2.309
         with:
             standalone: true
             pubkey: ${{ secrets.distribute_2_6_pubkey }}
