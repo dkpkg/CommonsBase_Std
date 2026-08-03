@@ -7,23 +7,17 @@ We'll make a nano-sized tarball for testing the tarball extraction rules.
 ... The tarball was created with macOS `bsdtar 3.5.3 - libarchive 3.7.4 zlib/1.2.12 liblzma/5.4.3 bz2lib/1.0.8`
 ... with the command `tar -cf nano.tar somefile`.
   % unified.asset { name="Nano", file="nano.tar" }
-  'asset'
-  '2048'
-  'sha256:791b8d0be20f8dfa6b7c08f6d16909c693a5f3aadbb0db4d846b32193184bbd9'
+  \dk.asset(byteSize: "2048", checksum: (sha256: "791b8d0be20f8dfa6b7c08f6d16909c693a5f3aadbb0db4d846b32193184bbd9"))\;
 
 nano.tbz is nano.tar compressed with Python 3.14 `bz2` (bzip2), exercising
 ... the short `.tbz` tarball suffix added in Extract@0.2.1.
   % unified.asset { name="NanoTbz", file="nano.tbz" }
-  'asset'
-  '140'
-  'sha256:16a9a8808c71311df9eb5c5fc092561b3701d469310a7b1b48d5f2c5301d54e3'
+  \dk.asset(byteSize: "140", checksum: (sha256: "16a9a8808c71311df9eb5c5fc092561b3701d469310a7b1b48d5f2c5301d54e3"))\;
 
 nano.tar.zst is nano.tar compressed with Python 3.14 `compression.zstd`
 ... (Zstandard), exercising the `.tar.zst` support added in Extract@0.3.0.
   % unified.asset { name="NanoZst", file="nano.tar.zst" }
-  'asset'
-  '116'
-  'sha256:56966bc7b38d3fa21de2db5c227c225db7499420bff4498937d2ff6c39910b6f'
+  \dk.asset(byteSize: "116", checksum: (sha256: "56966bc7b38d3fa21de2db5c227c225db7499420bff4498937d2ff6c39910b6f"))\;
 
 ## CommonsBase_Std.Extract.F_Untar@0.1.0
 
