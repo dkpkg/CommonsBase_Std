@@ -62,7 +62,11 @@ function rules.F_TarToZip(command, request)
             "Release.Darwin_x86_64", "Release.Darwin_arm64",
             "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
           },
-          execution_slot = "Release.execution_abi"
+          -- The zipped tree is a target artifact (the extracted tarball ships to
+          -- the target), so the object uses the target ABI slot. A cross-build
+          -- on one execution host thereby gives each target a distinct object.
+          -- See the "Object Slot ABI" section of the dk SPECIFICATION.
+          execution_slot = "Release.target_abi"
         }
       }
     }
