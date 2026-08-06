@@ -218,7 +218,14 @@ end
 -- move each member to its stripped (+ destdir) output path under <slot>.
 function CommonsBase_Std__Extract__0_3_0.shape_extract(commands, p, slot, archive, nstrip, has_dest)
   local H = CommonsBase_Std__Extract__0_3_0
-  table.insert(commands, H.append_paths({ p.sevenzexe_win32, "x", "-o" .. slot, archive }, p.paths))
+  -- Extract into a staging directory rather than the slot root. A shaped output
+  -- path can name a directory the unshaped layout still occupies: an `age/age`
+  -- member stripped to `age` moves into the surviving `age/` directory and lands
+  -- back where it started, so the member never reaches its declared path.
+  -- Staging keeps every source path distinct from every destination path.
+  local stage = slot .. "/.dk-untar-stage"
+  table.insert(commands,
+    H.append_paths({ p.sevenzexe_win32, "x", "-o" .. stage, archive }, p.paths))
   local pi = 1
   while p.paths[pi] ~= nil do
     local outrel = H.strip_leading(p.paths[pi], nstrip)
@@ -227,9 +234,12 @@ function CommonsBase_Std__Extract__0_3_0.shape_extract(commands, p, slot, archiv
     if reldir ~= "" then
       table.insert(commands, { p.coreutilsexe, "mkdir", "-p", slot .. "/" .. reldir })
     end
-    table.insert(commands, { p.coreutilsexe, "mv", slot .. "/" .. p.paths[pi], slot .. "/" .. outrel })
+    table.insert(commands, { p.coreutilsexe, "mv", stage .. "/" .. p.paths[pi], slot .. "/" .. outrel })
     pi = pi + 1
   end
+  -- The staging directory must not survive: the slot is verified against
+  -- `outputs.assets`, and whatever is left here counts as an undeclared extra.
+  table.insert(commands, { p.coreutilsexe, "rm", "-rf", stage })
 end
 
 function CommonsBase_Std__Extract__0_3_0.untar(p)
