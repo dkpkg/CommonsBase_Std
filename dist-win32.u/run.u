@@ -132,6 +132,20 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   \dk.object(abi: "Release.Linux_x86_64", value-id: "otfyek5etwxq26fx467yapskfpyqw2xdn7p2imykjei3c3mrt2ila")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "obk7ys2uvsincpnssai56y2mwrqtym65sxbuuyazdlyhzzk3ultca")\;
 
+## CommonsBase_Std.Extract.F_Untar@0.3.1
+
+-- (Function rule) Same as @0.3.0 plus `-snl-` on every Windows `7z.exe x`, so a
+-- tarball that carries a symbolic link whose target escapes the extraction root
+-- extracts (skipping the link) instead of failing with 7-Zip's "dangerous link"
+-- exit 2.
+
+  $ post-object CommonsBase_Std.Extract.F_Untar@0.3.1 -f ${RUNTIME}/Extract.0_3_1.F_Untar.untar.zip
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_Untar@0.3.1
+  >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
+  >   'paths[]=somefile'
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "o00000000000000000000000000000000000000000000000000000")\;
+
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
 
 -- (Function rule) Extracts a tar, tar.gz, tar.xz or tar.bz2 file and then re-compresses it
@@ -242,6 +256,20 @@ Others: the S7z object
   \test(pass)
   \dk.object(abi: "Release.Linux_x86_64", value-id: "otmrvdnkpmmwv4tnii4jjsva3xv7ywrqoo2ls36mz2cm3qkbaw74q")
   \dk.object(abi: "Release.Windows_x86_64", value-id: "ovqfrus6tvaoviea3cb7tqninlu77dytu4pksaqbe6etzybnq4vma")\;
+
+## CommonsBase_Std.Extract.F_TarToZip@0.3.1
+
+-- (Function rule) Same as @0.3.0 plus `-snl-` on every Windows `7z.exe x`, so a
+-- source tarball that ships a symbolic link whose target escapes the extraction
+-- root (menhir's demos/) converts to a zip instead of failing with 7-Zip's
+-- "dangerous link" exit 2. This is the version CommonsLang_OCaml's OpamBuild
+-- delegates its source extraction to.
+
+  $ post-object CommonsBase_Std.Extract.F_TarToZip@0.3.1 -f ${RUNTIME}/Extract.0_3_1.F_TarToZip.tartozip.zip
+  >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
+  >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.3.1
+  \test(pass)
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "o00000000000000000000000000000000000000000000000000000")\;
 
 ## CommonsBase_Std.S7z.S7zr@25.1.0
   $ get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.S7zr-25.1.0.zip
