@@ -144,7 +144,7 @@ On Windows the 7z.exe from S7z command is fetched from an asset and used.
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   'paths[]=somefile'
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "o00000000000000000000000000000000000000000000000000000")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "ogfogl66g56jgw4wffmkiqypgxzny5yyhznlw4gqremrfy5qm5zqq")\;
 
 ## CommonsBase_Std.Extract.F_TarToZip@0.1.0
 
@@ -269,7 +269,7 @@ Others: the S7z object
   >   tarmodver=CommonsBase_Std.Apparatus.Nano@0.1.0 tarassetpath=nano.tar
   >   modver=OurTest_Std.CommonsBase.Std.Extract.F_TarToZip@0.3.1
   \test(pass)
-  \dk.object(abi: "Release.Windows_x86_64", value-id: "o00000000000000000000000000000000000000000000000000000")\;
+  \dk.object(abi: "Release.Windows_x86_64", value-id: "o7u6u6pxm6htdflgu77ouqwicbvgmvcq45sp4usozkjlsgdrzwycq")\;
 
 ## CommonsBase_Std.S7z.S7zr@25.1.0
   $ get-object CommonsBase_Std.S7z.S7zr@25.1.0 -s Release.Windows_x86_64 -f ${RUNTIME}/Windows_x86_64-S7z.S7zr-25.1.0.zip
