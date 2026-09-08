@@ -60,7 +60,13 @@ function rules.F_TarToZip(command, request)
           slots = {
             "Release.Windows_x86", "Release.Windows_x86_64", "Release.Windows_arm64",
             "Release.Darwin_x86_64", "Release.Darwin_arm64",
-            "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86"
+            "Release.Linux_x86_64", "Release.Linux_arm64", "Release.Linux_x86",
+            -- The tar-to-zip output is the SAME BYTES whatever ABI ran the conversion, so it is
+            -- offered ABI-free as well. Added 2026-09-08: two CommonsLang_OCaml toolchain forms
+            -- had requested Release.Agnostic since the day they were written and NO version of
+            -- this rule offered it, so the request could never have resolved. Confer
+            -- dk-engine-opt problems/a-slot-request-no-producer-declares.
+            "Release.Agnostic"
           },
           execution_slot = "Release.execution_abi"
         }
